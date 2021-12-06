@@ -1,0 +1,254 @@
+---
+title: "CHOE.JONGWOOK-HW1"
+author: "JONG-WOOK-CHOE"
+output:
+  pdf_document: default
+  html_document: default
+---
+I.
+
+(a) 
+
+The population is the diamond price. The samples are taken by size, color, clarity, and certify of the diamond. These implications make difference of the price. Therefore, the purpose of this project is to determine which factors affects diamond price.
+
+(b)
+
+```{r, echo=FALSE}
+library("readxl")
+the.data = read_excel("/Users/Bosco/Desktop/SPRING2021/STA 135/data/diamond_prices.xls")
+plot(x=the.data$carat, y=the.data$price, xlab="carat", ylab="price", main="price vs. carat",col = "red", pch = 1, cex = 1.0,)
+```
+Since the scatter plot shows positive slope and orgainzed shape we could say there are relationship between price and carat.
+
+
+(c)
+
+```{r, echo=FALSE}
+s1=lm(price~carat,data=the.data)
+s2=lm(price~color,data=the.data)
+s3=lm(price~clarity,data=the.data)
+s4=lm(price~certify,data=the.data)
+cat("First model","\n")
+summary(s1)
+cat("Second model","\n")
+summary(s2)
+cat("Third model","\n")
+summary(s3)
+cat("Fourth model","\n")
+summary(s4)
+```
+
+(d)
+
+```{r, echo=FALSE}
+the.table = anova(s1)
+t.test=the.table[1,4]
+pvalue=the.table[1,5]
+```
+
+The hypotheses are made regard to sample mean whether different carat size affects the price of diamond. If the carat size have no affect the sample means are going to be same. If there are carat size effect the sample means are going to be different. 
+
+$H_0$: There are no difference between sample means.
+$H_A$: At least one sample mean is different.
+
+To test hypothesis test statistic answer the question. f-value is `r t.test` and gives p-value `r pvalue`
+
+Since p-value is smaller than $\alpha$=0.05, the null hypothesis is rejected. The study concluded that the average diamond price differ by carat size. Therefore there is a linear relationship between carat and price.
+
+(e)
+
+```{r, echo=FALSE}
+table2=anova(s2)
+test2=table2[1,4]
+pval2=table2[1,5]
+table3=anova(s3)
+test3=table3[1,4]
+pval3=table3[1,5]
+table4=anova(s4)
+test4=table4[1,4]
+pval4=table4[1,5]
+```
+
+With appropriate hypothesis tests p-value is smaller than $\alpha$=0.05 when testing clarity & price and certify & price. While p-value is bigger than $\alpha$=0.05 when testing color. Therefore there are linear relationship between clarity and certify with diamond price. However, in 95% confidence level it is hard to say there are linear relationship between color and price of the diamond.
+
+(f)
+
+```{r, echo=FALSE}
+r1=summary(s1)$r.squared
+r2=summary(s2)$r.squared
+r3=summary(s3)$r.squared
+r4=summary(s4)$r.squared
+```
+
+$R^2$ value tells the proportion chance of reducing the error when adding an new effect. Therefore if the value is large there are higher chance of avoiding the error. $R^2$ when adding carat is `r r1`, color is `r r2`, clarity is `r r3`, and certify is `r r4`. Among these values $R^2$ when adding carat is the largest. Therefore it concludes that carat variable is doing the best job of estimating the price. In other words adding carat variable with price there are higher chance of avoiding the error.
+
+(g)
+
+The color is not significantly affecting the price of the diamond however, big carat size with G color, VS2 clarity, and IGI certify tend to be highly priced. From the sample models the (Pr>|t|) ones that are specific to categorical levels the smallest category of each predictor variable is what makes price different. 
+
+(h)
+
+```{r, echo=FALSE}
+carat=subset(the.data,carat==0.5)
+carat
+carat_p=mean(carat$price)
+```
+
+The estimated price of a 0.5 carat diamond is `r carat_p`. From the dataset check the price of the 0.5 carat diamond and calculate the average in order to get approximate price. Using R is more simpler than hand calculations. Subset the 0.5 carat dataset then use mean function to get average we can find the estimated price of a 0.5 carat diamond. 
+
+
+(i)
+
+```{r, echo=FALSE}
+newdata = data.frame(carat=0.5)
+help(predict.lm)
+con=predict(s1, newdata, interval="confidence", level=0.95)
+pre=predict(s1, newdata, interval="prediction", level=0.95)
+```
+
+Prediction intervals are about the ability to predict a new piece of data in model. On the other hand confidence intervals are about the data already given in model. Therefore it is more appropriate to use prediction interval to use with estimating the new price. 
+
+(`r pre`)
+
+(j)
+
+2,500 for a 0.5 carat is in the prediction interval however, it is out of confidence interval boundary. Since the 0.5 carat diamonds have been purchased between `r con` therefore price is not reasonable. 
+
+(k)
+
+```{r, echo=FALSE}
+plot(x = the.data$carat, y = the.data$price,
+xlab = "carat", ylab = "price", main = "price vs. carat(confidence interval)")
+abline(a = s1$coefficients[1], b = s1$coefficients[2],
+lty = "solid", col = "red", lwd = 2)
+curve(expr = predict(object = s1, newdata = data.frame(carat=x),
+interval = "confidence", level = 0.95)[,2], col = "darkgreen", lty =
+"dashed", lwd = 1, add = TRUE, from = min(the.data$carat), to =
+max(the.data$carat))
+curve(expr = predict(object = s1, newdata = data.frame(carat=x),
+interval = "confidence", level = 0.95)[,3], col = "darkgreen", lty =
+"dashed", lwd = 1, add = TRUE, from = min(the.data$carat), to =
+max(the.data$carat))
+plot(x = the.data$carat, y = the.data$price,
+xlab = "carat", ylab = "price", main = "price vs. carat(prediction interval)")
+abline(a = s1$coefficients[1], b = s1$coefficients[2],
+lty = "solid", col = "red", lwd = 2)
+curve(expr = predict(object = s1, newdata = data.frame(carat=x),
+interval = "prediction", level = 0.95)[,2], col = "blue", lty =
+"dashed", lwd = 1, add = TRUE, from = min(the.data$carat), to =
+max(the.data$carat))
+curve(expr = predict(object = s1, newdata = data.frame(carat=x),
+interval = "prediction", level = 0.95)[,3], col = "blue", lty =
+"dashed", lwd = 1, add = TRUE, from = min(the.data$carat), to =
+max(the.data$carat))
+```
+
+II
+
+(a)
+
+```{r, echo=FALSE}
+pnorm(0.9,6,sqrt(10))
+```
+
+(b)
+
+```{r, echo=FALSE}
+x<-c(1,2,3,4,5)
+pnorm(x, mean = 6, sd = sqrt(10),log = x<10.5)
+```
+
+(c)
+
+```{r, echo=FALSE}
+qchisq(0.1,10)
+```
+
+(d)
+
+```{r, echo=FALSE}
+x<-c(3.68, -3.63, 0.80, 3.03, -9.86, -8.66, -2.38, 8.94, 0.52, 1.25)
+x
+t.test(x,var.equal = 1000,conf.level = 0.9)
+```
+
+(e)
+
+```{r, echo=FALSE}
+ls("package:stats")
+```
+
+## Appendix
+
+```{r,eval=FALSE}
+library("readxl")
+the.data = read_excel("/Users/Bosco/Desktop/SPRING2021/STA 135/data/diamond_prices.xls")
+plot(x=the.data$carat, y=the.data$price, xlab="carat", ylab="price", main="price vs. carat",col = "red", pch = 1, cex = 1.0,)
+s1=lm(price~carat,data=the.data)
+s2=lm(price~color,data=the.data)
+s3=lm(price~clarity,data=the.data)
+s4=lm(price~certify,data=the.data)
+cat("First model","\n")
+summary(s1)
+cat("Second model","\n")
+summary(s2)
+cat("Third model","\n")
+summary(s3)
+cat("Fourth model","\n")
+summary(s4)
+the.table = anova(s1)
+t.test=the.table[1,4]
+pvalue=the.table[1,5]
+table2=anova(s2)
+test2=table2[1,4]
+pval2=table2[1,5]
+table3=anova(s3)
+test3=table3[1,4]
+pval3=table3[1,5]
+table4=anova(s4)
+test4=table4[1,4]
+pval4=table4[1,5]
+r1=summary(s1)$r.squared
+r2=summary(s2)$r.squared
+r3=summary(s3)$r.squared
+r4=summary(s4)$r.squared
+carat=subset(the.data,carat==0.5)
+carat
+carat_p=mean(carat$price)
+newdata = data.frame(carat=0.5)
+help(predict.lm)
+con=predict(s1, newdata, interval="confidence", level=0.95)
+pre=predict(s1, newdata, interval="prediction", level=0.95)
+plot(x = the.data$carat, y = the.data$price,
+xlab = "carat", ylab = "price", main = "price vs. carat(confidence interval)")
+abline(a = s1$coefficients[1], b = s1$coefficients[2],
+lty = "solid", col = "red", lwd = 2)
+curve(expr = predict(object = s1, newdata = data.frame(carat=x),
+interval = "confidence", level = 0.95)[,2], col = "darkgreen", lty =
+"dashed", lwd = 1, add = TRUE, from = min(the.data$carat), to =
+max(the.data$carat))
+curve(expr = predict(object = s1, newdata = data.frame(carat=x),
+interval = "confidence", level = 0.95)[,3], col = "darkgreen", lty =
+"dashed", lwd = 1, add = TRUE, from = min(the.data$carat), to =
+max(the.data$carat))
+plot(x = the.data$carat, y = the.data$price,
+xlab = "carat", ylab = "price", main = "price vs. carat(prediction interval)")
+abline(a = s1$coefficients[1], b = s1$coefficients[2],
+lty = "solid", col = "red", lwd = 2)
+curve(expr = predict(object = s1, newdata = data.frame(carat=x),
+interval = "prediction", level = 0.95)[,2], col = "blue", lty =
+"dashed", lwd = 1, add = TRUE, from = min(the.data$carat), to =
+max(the.data$carat))
+curve(expr = predict(object = s1, newdata = data.frame(carat=x),
+interval = "prediction", level = 0.95)[,3], col = "blue", lty =
+"dashed", lwd = 1, add = TRUE, from = min(the.data$carat), to =
+max(the.data$carat))
+pnorm(0.9,6,sqrt(10))
+x<-c(1,2,3,4,5)
+pnorm(x, mean = 6, sd = sqrt(10),log = x<10.5)
+qchisq(0.1,10)
+x<-c(3.68, -3.63, 0.80, 3.03, -9.86, -8.66, -2.38, 8.94, 0.52, 1.25)
+x
+t.test(x,var.equal = 1000,conf.level = 0.9)
+ls("package:stats")
+```

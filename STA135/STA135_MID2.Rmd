@@ -1,0 +1,319 @@
+---
+title: "CHOE.JONGWOOK-MID2"
+author: "JONG-WOOK-CHOE"
+output: pdf_document
+---
+
+```{r, echo=FALSE}
+birth=read.csv("/Users/Bosco/Desktop/SPRING2021/STA 135/data/Birthweight_reduced_kg_R.csv")
+birth=birth[,-c(1,15,16)]
+```
+
+The dataset "Birthweight_reduced_kg_R.csv" is an information about new born babies and their parents that we discussed before. There are total of 16 variables and 3 categorical variables.
+
+# 1 Data explortaion - Data cleaning
+
+Assumptions of multiple linear regression is following,
+
+First, there must be a linear relationship between the response variable and independent variables. If so, multiple regression assumes that the residuals are normally distributed
+
+Secondly, multiple regression assumes that the independent variables are not highly correlated with each other.
+
+The linearity assumption can best be tested with scatter plots but this time normality will be discussed in Shapiro-Wilks test.
+
+* H0: The errors are normally distributed vs.
+* HA: The errors are not normally distributed,
+
+```{r, echo=FALSE}
+n.birth=birth[,-5]# removing categorical variables
+model=lm(Birthweight~.,data=n.birth)
+ei <- model$residuals
+the.SWtest = shapiro.test(ei)
+the.SWtest
+```
+
+The p-value is nearly 0 but with 99% significance level we can conclude that the data is normally distributed.
+
+However we need to check whether removing possible outlier is necessary. Using the mahalanobis distance it calculates those fall above the cut-off score for a chi-square with k degrees of freedom.
+
+```{r, echo=FALSE}
+md <- mahalanobis(n.birth, center = colMeans(n.birth), cov = cov(n.birth))
+alpha <- .01
+cutoff <- (qchisq(p = 1 - alpha, df = ncol(n.birth)))
+names_outliers_MH <- which(md > cutoff)
+names_outliers_MH
+```
+
+# 2 Linear Model fitting
+
+```{r, echo=FALSE}
+par(mfrow=c(2,2))
+plot(model)
+```
+
+1. Based on the Q-Q plot, it appears to be a fairly safe assumption for the multivariate normally test.
+
+```{r, echo=FALSE}
+library(RVAideMemoire)
+mqqnorm(n.birth,main='Q-Q plot of Mahalanobis D^2 VS. quantiles of Chi^2')
+```
+
+2. The chi-square Q-Q plot indicates departures from multivariate normal distribution. We observe two outliers, observations #26 and #42.
+
+
+3. In multiple regression analysis, we first examine the F-statistics and its associated p-value.
+Recall that the F test statistics is testing the hypotheses
+
+* H0 : $\beta_1=\beta_2=...=\beta_{12}=\beta_{13}=0$ against
+* HA : at least one of $\beta_i$ is nonzero.
+
+```{r, echo=FALSE}
+summary(model)
+```
+
+For this example the p-value of the F-statistic is 8.076e-07 which is highly significant. As a conclusion at
+least one of the predictor variables is significantly related to the outcome variable, baby Birth weight.
+
+Next, we should examine the variables that are significant. In other to address that we should look at
+the coefficients table, which shows the estimate of regression beta coefficients and the associated t-statistic
+p-values.
+
+```{r, echo=FALSE}
+summary(model)$coefficient
+```
+
+For a given the predictor, the t-statistic evaluates whether or not there is significant association between
+the predictor and the outcome variable, that is whether the beta coefficient of the predictor is significantly
+different from zero.
+
+Therefore, maternal age, number of cigarettes smoked per day by mother, and father's height are not significant in the multiple regression model. This means they will not significantly affect baby's birth weight.
+
+```{r, echo=FALSE}
+par(mfrow=c(2,2))
+plot(n.birth$Headcirc,n.birth$Birthweight)
+abline(lm(n.birth$Birthweight ~ n.birth$Headcirc),col='red')
+plot(n.birth$mage,n.birth$Birthweight)
+abline(lm(n.birth$Birthweight ~ n.birth$mage),col='red')
+plot(n.birth$mnocig,n.birth$Birthweight)
+abline(lm(n.birth$Birthweight ~ n.birth$mnocig),col='red')
+plot(n.birth$fheight,n.birth$Birthweight)
+abline(lm(n.birth$Birthweight ~ n.birth$fheight),col='red')
+```
+Generated pairwise plots of individual covariate and the dependent variable shows that maternal age, number of cigarettes smoked per day by mother, and father's height are not significant, it is possible to remove it from the model
+
+4. When interested in simultaneously testing whether a certain subset of the coefficients are equal to 0. This can be done using F-test or sometime refer to as partial F-test.
+
+```{r, echo=FALSE}
+f.model <- model
+r.model <- lm(Birthweight~.-mage-mnocig-fheight,data=n.birth)
+anova(f.model,r.model)
+```
+
+The output shows that result of the partial F-test. The F statistics is F = 1.4835 and the corresponding
+p-value is 0.239 which is significant at any level $\alpha$, thus we can't reject the null hypothesis. Hence we can conclude that the betas are nonzero. This means that maternal age, number of cigarettes smoked per day by mother, and father's height are not significantly statistic to contribute the birth weight.
+
+Therefore our final model is without mage, mnocig, and fheight variables from full model.
+
+Model 1: Birthweight = $\beta_0$ + $\beta_1$Length + $\beta_2$Headcirc + $\beta_3$Gestation + $\beta_4$mheight + $\beta_5$mppwt + $\beta_6$fage + $\beta_7$fedyrs + $\beta_8$fnocig
+
+# 3 Linear Discriminat Analysis and MANOVA
+
+```{r, echo=FALSE}
+pca.cor<-princomp(formula = ~.-smoker, data = birth,
+cor = TRUE, scores = TRUE)
+summary(pca.cor, loadings = TRUE, cutoff = 0.0)
+```
+
+Two PCs explain only 46% of the total variation in the data, and three PCs explain only 59% of the total
+variation in the data. Therefore it needs at least seven PCs.
+
+```{r, echo=FALSE}
+library(MASS)
+birth.color<-ifelse(test = birth$smoker == 1, yes = "red", no = "black")
+parcoord(x = birth[,-5], col = birth.color, main = "birth data parallel coordinate plot")
+```
+Plots of the data can be performed to obtain an initial understanding of it. However, the parallel coordinate plot is not too helpful due to the large number of discrete variables in the data set.
+
+```{r, echo=FALSE}
+pca.cor$scale<-apply(X = birth[,-5], MARGIN = 2, FUN = sd)
+score.cor<-predict(pca.cor, newdata = birth)
+common.limits<-c(min(score.cor[,1:2]), max(score.cor[,1:2]))
+plot(x = score.cor[,1], y = score.cor[,2], xlab = "PC #1", ylab = "PC #2",
+main = "Principal components \n Plotting point corresponds to smoker variable",
+xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"),
+col = birth.color)
+abline(h = 0)
+abline(v = 0)
+legend(x = -3, y = -2, legend = c("Success", "Failure"), col = c("red", "black"), bty = "n",
+pch = c(1,1))
+```
+
+```{r, echo=FALSE}
+add.data=rbind(birth,c(61,5.1,36,43,NA,43,7,165,64,38,19,45,189))
+obs1<-t(as.matrix(add.data[43,-5]))
+obs1
+pop0<-birth[birth$smoker == 0,-5]
+pop1<-birth[birth$smoker == 1,-5]
+N0<-nrow(pop0)
+N1<-nrow(pop1)
+sigma.hat0<-cov(pop0)
+sigma.hat1<-cov(pop1)
+sigma.hat.p<-((N0 - 1)*sigma.hat0 + (N1 - 1)*sigma.hat1)/(N0 + N1 - 2)
+mu.hat0<-as.matrix(colMeans(pop0)) 
+mu.hat1<-as.matrix(colMeans(pop1))
+b<-solve(sigma.hat.p) %*% (mu.hat0 - mu.hat1)
+k<-0.5*t(mu.hat0 - mu.hat1) %*% solve(sigma.hat.p) %*% (mu.hat0 + mu.hat1)
+D0<-t(obs1 - mu.hat0) %*% solve(sigma.hat.p) %*% (obs1 - mu.hat0)
+D1<-t(obs1 - mu.hat1) %*% solve(sigma.hat.p) %*% (obs1 - mu.hat1)
+data.frame(D0, D1)
+```
+
+Using the Mahalanobis distance the new observation belong to D1 since it has a small distance from the centroide of D0, that is, 53.10848 < 64.4205. This means newly born baby has non smoking mother.
+
+Comparing two population mean we used t-test. When it comes to more than three group we use the multivariate analysis of variance. The purpose here is to determine if there are differences in the means for the different variables.
+
+$H_0:\mu_1=\mu_2=...=\mu_{m}$
+
+$H_a$: Not all equal
+
+```{r, echo=FALSE}
+save.means<-aggregate(formula = cbind(Length,Birthweight,Headcirc,Gestation,mage,mnocig,mheight,mppwt,fage,fedyrs,fnocig,fheight) ~ smoker, data = birth, FUN = mean)
+save.means
+save <-manova(formula = cbind(Length,Birthweight,Headcirc,Gestation,mage,mnocig,mheight,mppwt,fage,fedyrs,fnocig,fheight) ~ factor(smoker), data = birth)
+summary(save, test = "Wilks")
+summary(save, test = "Pillai")
+summary(save, test = "Roy")
+```
+The test for the equality of the mean vectors has a very small p-value. Thus, there is sufficient evidence to indicate a difference among the mean affect for mother's smoking status. Since the null hypothesis is rejected, it is of interest to determine what caused the rejection. ANOVA methods can be used for each time level to examine which mean is different.
+
+```{r, echo=FALSE}
+mod.fit0<-aov(formula = Length ~ factor(smoker), data = birth)
+summary(mod.fit0)
+mod.fit1<-aov(formula = Birthweight ~ factor(smoker), data = birth)
+summary(mod.fit1)
+mod.fit2<-aov(formula = Headcirc ~ factor(smoker), data = birth)
+summary(mod.fit2)
+mod.fit3<-aov(formula = Gestation ~ factor(smoker), data = birth)
+summary(mod.fit3)
+mod.fit4<-aov(formula = mage ~ factor(smoker), data = birth)
+summary(mod.fit4)
+mod.fit5<-aov(formula = mnocig ~ factor(smoker), data = birth)
+summary(mod.fit5)
+mod.fit6<-aov(formula = mheight ~ factor(smoker), data = birth)
+summary(mod.fit6)
+mod.fit7<-aov(formula = mppwt ~ factor(smoker), data = birth)
+summary(mod.fit7)
+mod.fit8<-aov(formula = fage ~ factor(smoker), data = birth)
+summary(mod.fit8)
+mod.fit9<-aov(formula = fedyrs ~ factor(smoker), data = birth)
+summary(mod.fit9)
+mod.fit10<-aov(formula = fnocig ~ factor(smoker), data = birth)
+summary(mod.fit10)
+mod.fit11<-aov(formula = fheight ~ factor(smoker), data = birth)
+summary(mod.fit11)
+```
+
+For this data set, Length, Headcirc, Gestation, mage, mheight, mppwt, fage, fedyrs, and fheight do not have a significant difference between mean hits. The remaining Birthweight, mnocig, and fnocig do have significant differences.
+
+# 4 Conclusion
+
+First, when considering the variable Birthweight as the dependent variable, we figured it out that the newly born baby's birth weight has small correlation with mother's age, number of cigarettes smoked by mother, and father's height. After that, when considering the mother's smoking status as the dependent variable, it tells baby's birth weight, number of cigarettes smoked by mother, and number of cigarettes smoked by father have significant difference in mother's smoking status. Also, we found that the missing mother status of a newly born baby whose characteristics are reported on Table 1 is non smoking mother.
+
+## Appendix
+
+```{r,eval=FALSE}
+birth=read.csv("/Users/Bosco/Desktop/SPRING2021/STA 135/data/Birthweight_reduced_kg_R.csv")
+birth=birth[,-c(1,15,16)]
+n.birth=birth[,-5]# removing categorical variables
+model=lm(Birthweight~.,data=n.birth)
+ei <- model$residuals
+the.SWtest = shapiro.test(ei)
+the.SWtest
+md <- mahalanobis(n.birth, center = colMeans(n.birth), cov = cov(n.birth))
+alpha <- .01
+cutoff <- (qchisq(p = 1 - alpha, df = ncol(n.birth)))
+names_outliers_MH <- which(md > cutoff)
+names_outliers_MH
+par(mfrow=c(2,2))
+plot(model)
+library(RVAideMemoire)
+mqqnorm(n.birth,main='Q-Q plot of Mahalanobis D^2 VS. quantiles of Chi^2')
+summary(model)
+summary(model)$coefficient
+par(mfrow=c(2,2))
+plot(n.birth$Headcirc,n.birth$Birthweight)
+abline(lm(n.birth$Birthweight ~ n.birth$Headcirc),col='red')
+plot(n.birth$mage,n.birth$Birthweight)
+abline(lm(n.birth$Birthweight ~ n.birth$mage),col='red')
+plot(n.birth$mnocig,n.birth$Birthweight)
+abline(lm(n.birth$Birthweight ~ n.birth$mnocig),col='red')
+plot(n.birth$fheight,n.birth$Birthweight)
+abline(lm(n.birth$Birthweight ~ n.birth$fheight),col='red')
+f.model <- model
+r.model <- lm(Birthweight~.-mage-mnocig-fheight,data=n.birth)
+anova(f.model,r.model)
+pca.cor<-princomp(formula = ~.-smoker, data = birth,
+cor = TRUE, scores = TRUE)
+summary(pca.cor, loadings = TRUE, cutoff = 0.0)
+library(MASS)
+birth.color<-ifelse(test = birth$smoker == 1, yes = "red", no = "black")
+parcoord(x = birth[,-5], col = birth.color, main = "birth data parallel coordinate plot")
+pca.cor$scale<-apply(X = birth[,-5], MARGIN = 2, FUN = sd)
+score.cor<-predict(pca.cor, newdata = birth)
+common.limits<-c(min(score.cor[,1:2]), max(score.cor[,1:2]))
+plot(x = score.cor[,1], y = score.cor[,2], xlab = "PC #1", ylab = "PC #2",
+main = "Principal components \n Plotting point corresponds to smoker variable",
+xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"),
+col = birth.color)
+abline(h = 0)
+abline(v = 0)
+legend(x = -3, y = -2, legend = c("Success", "Failure"), col = c("red", "black"), bty = "n",
+pch = c(1,1))
+add.data=rbind(birth,c(61,5.1,36,43,NA,43,7,165,64,38,19,45,189))
+obs1<-t(as.matrix(add.data[43,-5]))
+obs1
+pop0<-birth[birth$smoker == 0,-5]
+pop1<-birth[birth$smoker == 1,-5]
+N0<-nrow(pop0)
+N1<-nrow(pop1)
+sigma.hat0<-cov(pop0)
+sigma.hat1<-cov(pop1)
+sigma.hat.p<-((N0 - 1)*sigma.hat0 + (N1 - 1)*sigma.hat1)/(N0 + N1 - 2)
+mu.hat0<-as.matrix(colMeans(pop0)) 
+mu.hat1<-as.matrix(colMeans(pop1))
+b<-solve(sigma.hat.p) %*% (mu.hat0 - mu.hat1)
+k<-0.5*t(mu.hat0 - mu.hat1) %*% solve(sigma.hat.p) %*% (mu.hat0 + mu.hat1)
+D0<-t(obs1 - mu.hat0) %*% solve(sigma.hat.p) %*% (obs1 - mu.hat0)
+D1<-t(obs1 - mu.hat1) %*% solve(sigma.hat.p) %*% (obs1 - mu.hat1)
+data.frame(D0, D1)
+save.means<-aggregate(formula = cbind(Length,Birthweight,Headcirc,Gestation,mage,mnocig,mheight,mppwt,fage,fedyrs,fnocig,fheight) ~ smoker, data = birth, FUN = mean)
+save.means
+save <-manova(formula = cbind(Length,Birthweight,Headcirc,Gestation,mage,mnocig,mheight,mppwt,fage,fedyrs,fnocig,fheight) ~ factor(smoker), data = birth)
+summary(save, test = "Wilks")
+summary(save, test = "Pillai")
+summary(save, test = "Roy")
+mod.fit0<-aov(formula = Length ~ factor(smoker), data = birth)
+summary(mod.fit0)
+mod.fit1<-aov(formula = Birthweight ~ factor(smoker), data = birth)
+summary(mod.fit1)
+mod.fit2<-aov(formula = Headcirc ~ factor(smoker), data = birth)
+summary(mod.fit2)
+mod.fit3<-aov(formula = Gestation ~ factor(smoker), data = birth)
+summary(mod.fit3)
+mod.fit4<-aov(formula = mage ~ factor(smoker), data = birth)
+summary(mod.fit4)
+mod.fit5<-aov(formula = mnocig ~ factor(smoker), data = birth)
+summary(mod.fit5)
+mod.fit6<-aov(formula = mheight ~ factor(smoker), data = birth)
+summary(mod.fit6)
+mod.fit7<-aov(formula = mppwt ~ factor(smoker), data = birth)
+summary(mod.fit7)
+mod.fit8<-aov(formula = fage ~ factor(smoker), data = birth)
+summary(mod.fit8)
+mod.fit9<-aov(formula = fedyrs ~ factor(smoker), data = birth)
+summary(mod.fit9)
+mod.fit10<-aov(formula = fnocig ~ factor(smoker), data = birth)
+summary(mod.fit10)
+mod.fit11<-aov(formula = fheight ~ factor(smoker), data = birth)
+summary(mod.fit11)
+```

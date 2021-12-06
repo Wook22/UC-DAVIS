@@ -1,0 +1,121 @@
+---
+title: "CHOE.JONGWOOK-FINAL"
+author: "JONG-WOOK-CHOE"
+output: pdf_document
+---
+
+## Introduction
+
+Started from last year, a worldwide tragedy has occurred due to COVID-19. There are still various countries that struggle to fight pandemics. According to ABC News, on 13 May 2021, fourteen states already have at least 50% of their population having received at least one COVID-19 vaccine dose (ABC). Vermont, which is currently leading the country in vaccinations, has seen the most significant percent change in its daily case average over the last four weeks, with a nearly 61% decline. It is almost an endpoint but also critical points where everyone's attention is needed. 
+The goal is to understand the current COVID-19 activity worldwide. Moreover, understanding the virus and how it spread.
+
+## Data, Models, and Methods
+
+The Data is following,
+
+```{r, echo=FALSE}
+data=read.csv("/Users/Bosco/Desktop/SPRING2021/STA 135/data/COVID.csv")
+head(data)
+```
+
+The variables include total cases confirmed with COVID-19, active cases refers
+to total number of open cases (mild, serious, or critical); total deaths refers to total deaths with COVID-19; critically ill cases refers to number of serious/critically ill cases; mortality recovery ratio refers to the ratio between total deaths to total recovered patients.
+
+In order to see worldwide COVID-19 activity we will do principal component analysis on three different time points. If they share same PCA results then we can conclude there are trend.
+
+First with data diagnostic,
+
+```{r, echo=FALSE}
+test.data=data[,-c(1:2)]# removing categorical variables
+test.model=lm(Total.Cases~.,data=test.data)
+ei <- test.model$residuals
+the.SWtest = shapiro.test(ei)
+the.SWtest
+```
+
+The p-value is nearly 0 but with 95% significance level we can conclude that the data is normally distributed. Therefore, it appears to be a fairly safe assumption for the PCA test.
+
+Now we divide dataset into three different types,
+
+```{r, echo=FALSE}
+type_1=subset(data,Time=='30Mar')
+head(type_1)
+type_2=subset(data,Time=='15Apr')
+head(type_2)
+type_3=subset(data,Time=='25Apr')
+head(type_3)
+```
+
+## Result
+
+The principal component analysis of 30 March 2020 if following,
+
+```{r, echo=FALSE}
+type_1=type_1[,-c(1,2)]
+pca.f=princomp(x = type_1, cor = TRUE,scores = TRUE)
+summary(pca.f, loadings = TRUE, cutoff = 0.2)
+```
+
+First PC explain 99.9% of total variance. Therefore, it is enough for us to use the only first principal component for the data if we want to explain at least 90% of the total variability. 
+
+Following is the results of 15 April 2020 and 25 April 2020,
+
+```{r, echo=FALSE}
+type_2=type_2[,-c(1,2)]
+pca.s=princomp(x = type_2, cor = TRUE,scores = TRUE)
+summary(pca.s, loadings = TRUE, cutoff = 0.2)
+
+type_3=type_3[,-c(1,2)]
+pca.t=princomp(x = type_1, cor = TRUE,scores = TRUE)
+summary(pca.t, loadings = TRUE, cutoff = 0.2)
+```
+
+This shows that the PCA of three different types shares the same result. Meaning the correlation between variables stays the same even with the other dates.
+
+Also, the following bioplot of three different dates share the same result.
+
+```{r, echo=FALSE}
+biplot(pca.f,scale=0)
+biplot(pca.s,scale=0)
+biplot(pca.t,scale=0)
+```
+When two vectors are close, forming a slight angle, the two variables they represent are positively correlated. Therefore active cases, total deaths, and mortality and recovery ratio are positively correlated. At the same time, total cases and critical are highly correlated to each anther.
+
+## Conclusion and Future work
+
+A worldwide pandemic is now showing its end in the US. COVID-19 cases and deaths in the United States have dropped to their lowest levels in nearly a year, and the number of people vaccinated continues to grow. Over 41.6% of the population is currently vaccinated. The project aimed is to understand the current worldwide COVID-19 activity and how the virus spread. Data analysis showed that in the three different times, the PCA results were identical. This means total cases confirmed with COVID-19, the total number of active instances, total deaths with COVID-19, the number of seriously ill cases, and the ratio between total deaths to total recovered patients have a specific trend. This could also mean that the same aspect is influencing different dates. 
+
+Now it's time to see countries with total cases less than 500. It could show different flow.
+
+
+## Appendix
+
+```{r,eval=FALSE}
+data=read.csv("/Users/Bosco/Desktop/SPRING2021/STA 135/data/COVID.csv")
+head(data)
+test.data=data[,-c(1:2)]# removing categorical variables
+test.model=lm(Total.Cases~.,data=test.data)
+ei <- test.model$residuals
+the.SWtest = shapiro.test(ei)
+the.SWtest
+type_1=subset(data,Time=='30Mar')
+head(type_1)
+type_2=subset(data,Time=='15Apr')
+head(type_2)
+type_3=subset(data,Time=='25Apr')
+head(type_3)
+type_1=type_1[,-c(1,2)]
+pca.f=princomp(x = type_1, cor = TRUE,scores = TRUE)
+summary(pca.f, loadings = TRUE, cutoff = 0.2)
+type_2=type_2[,-c(1,2)]
+pca.s=princomp(x = type_2, cor = TRUE,scores = TRUE)
+summary(pca.s, loadings = TRUE, cutoff = 0.2)
+
+type_3=type_3[,-c(1,2)]
+pca.t=princomp(x = type_1, cor = TRUE,scores = TRUE)
+summary(pca.t, loadings = TRUE, cutoff = 0.2)
+biplot(pca.f,scale=0)
+biplot(pca.s,scale=0)
+biplot(pca.t,scale=0)
+
+```

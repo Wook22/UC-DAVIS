@@ -1,0 +1,129 @@
+---
+title: "CHOE.JONGWOOK-HW2"
+author: "JONG-WOOK-CHOE"
+date: "4/30/2021"
+output: html_document
+---
+
+1.
+
+```{r}
+n=50
+k=10
+p=0.4
+sample=rbinom(n,k,p)
+sample
+```
+
+2.
+
+```{r}
+estimate_kp=function(x){
+  xbar=mean(x)
+  khat=xbar^2/(xbar-sum((x-xbar)^2)/length(x))
+  phat=xbar/khat
+  return(c(khat,phat))
+}
+estimate_kp(sample)
+```
+
+3.
+
+```{r}
+N=1000
+n=50
+k=10
+p=0.4
+n_sample = function(n){
+  x = rbinom(n,k,p)
+  return(x)
+}
+k_hat = function(x){
+  x_bar = mean(x)
+  n = length(x)
+  k_hat = (x_bar^2) / (x_bar - (1/n)*sum((x - x_bar)^2)) 
+  return(k_hat)
+}
+p_hat = function(x){
+  x_bar = mean(x)
+  n = length(x)
+  k_hat = (x_bar^2) / (x_bar - (1/n)*sum((x - x_bar)^2)) 
+  p_hat = mean(x) / k_hat
+  return(p_hat)
+}
+n_50=matrix(n_sample(1000),nrow=1000,ncol=50,byrow = TRUE)
+k_50=apply(n_50,1,k_hat)
+#estimates of k samples of size 50
+head(k_50,n=10)
+p_50=apply(n_50,1,p_hat)
+#estimates of p samples of size 50
+head(p_50,n=10)
+```
+
+4.
+
+```{r}
+n_100=matrix(n_sample(1000),nrow=1000,ncol=100,byrow = TRUE)
+k_100=apply(n_100,1,k_hat)
+#estimates of k samples of size 100
+head(k_100,n=10)
+p_100=apply(n_100,1,p_hat)
+#estimates of p samples of size 100
+head(p_100,n=10)
+n_250=matrix(n_sample(1000),nrow=1000,ncol=250,byrow = TRUE)
+k_250=apply(n_250,1,k_hat)
+#estimates of k samples of size 250
+head(k_250,n=10)
+p_250=apply(n_250,1,p_hat)
+#estimates of p samples of size 250
+head(p_250,n=10)
+```
+
+5.
+
+```{r}
+bias_k=c(mean(k_50)-k,mean(k_100)-k,mean(k_250)-k)
+MSE_k=c(mean((k_50-k)^2),mean((k_100-k)^2),mean((k_250-k)^2)) 
+bias_p=c(mean(p_50)-p,mean(p_100)-p,mean(p_250)-p)
+MSE_p=c(mean((p_50-p)^2),mean((p_100-p)^2),mean((p_250-p)^2))
+est_k=data.frame(bias_k=bias_k,MSE_k=MSE_k)
+row.names(est_k)=c("50","100","250")
+est_p=data.frame(bias_p=bias_p,MSE_p=MSE_p)
+row.names(est_p)=c("50","100","250")
+#Estimate the bias and the mean squared error (MSE) of k
+est_k
+#Estimate the bias and the mean squared error (MSE) of p
+est_p
+```
+Since the bias of k is positive, estimate of k seem to overestimate. On the other hand, the bias of p is negative therefore the estimate of p seem to underestimate. As sample size increase bias and MSE get small meaning that the estimated value get closer to true value.
+
+6.
+
+```{r}
+library(ggplot2)
+kdata=data.frame(rbind(cbind(k_50,"050"),cbind(k_100,"100"),cbind(k_250,"250")))
+colnames(kdata)=c("k","size")
+ggplot(data = kdata,mapping = aes(size,as.numeric(k)))+
+  geom_boxplot()+
+  geom_hline(yintercept=10, colour="grey", lty="dashed", size=1)+
+  labs(title = "(a)",
+  	x = "size",
+  	y = "k")
+ggplot(data = kdata,mapping = aes(size,as.numeric(k)))+
+  geom_boxplot()+
+  geom_hline(yintercept=10, colour="grey", lty="dashed", size=1)+
+  coord_cartesian(ylim = c(0,50))+
+  labs(title = "(b)",
+  	x = "size",
+  	y = "k")
+pdata=data.frame(rbind(cbind(p_50,"050"),cbind(p_100,"100"),cbind(p_250,"250")))
+colnames(pdata)=c("p","size")
+ggplot(data = pdata,mapping = aes(size,as.numeric(p)))+
+  geom_boxplot()+
+  geom_hline(yintercept=0.4, colour="grey", lty="dashed", size=1)+
+  labs(title = "(c)",
+  	x = "size",
+  	y = "p")
+```
+
+(d) As sample size increase box plot get closer to the grid line. It tells that the estimate get closer to the true value as sample size increase.

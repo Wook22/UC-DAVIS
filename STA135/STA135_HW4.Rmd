@@ -1,0 +1,67 @@
+---
+title: "CHOE.JONGWOOK-HW4"
+author: "JONG-WOOK-CHOE"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r, echo=FALSE}
+library(mvtnorm)
+# Two variables - Show eigenvectors on contour plot
+mu<-c(15, 20)
+sigma<-matrix(data = c(1, 0.5, 0.5, 1.25), nrow = 2, ncol = 2, byrow = TRUE)
+#sigma<-matrix(data = c(1, 0.5, 0.5, 0.26), nrow = 2, ncol = 2, byrow = TRUE)
+x1<-seq(from = 10, to = 25, by = 0.1)
+x2<-seq(from = 10, to = 25, by = 0.1)
+all.x<-expand.grid(x1, x2) #Creates all possible combinations
+eval.fx<-dmvnorm(x = all.x, mean = mu, sigma = sigma)
+fx<-matrix(data = eval.fx, nrow = length(x1), ncol = length(x2), byrow = FALSE)
+par(pty = "s")
+contour(x = x1, y = x2, z = fx,
+main = expression(paste("Multivariate normal contour plot with eigenvectors for ", Sigma)),
+xlab = expression(x[1]), ylab = expression(x[2]), xlim = c(-10,30), ylim = c(-10, 30),
+levels = c(0.01, 0.001))
+#panel.first = grid() does not work quite right so use abline()
+abline(h = seq(from = -10, to = 30, by = 10), lty = "dotted", col = "lightgray")
+abline(v = seq(from = -10, to = 30, by = 10), lty = "dotted", col = "lightgray")
+#Put in lines at x1 = 0 and x2 = 0
+abline(h = 0, lwd = 2)
+abline(v = 0, lwd = 2)
+save.eig<-eigen(sigma)
+save.eig$values
+save.eig$vectors
+arrows(x0 = 0, y0 = 0, x1 = 10*save.eig$vectors[1,1], y1 = 10*save.eig$vectors[2,1], col = "red",lty = "solid")
+arrows(x0 = 0, y0 = 0, x1 = 10*save.eig$vectors[1,2], y1 = 10*save.eig$vectors[2,2], col = "red",lty = "solid")
+```
+
+## Appendix
+
+```{r,eval=FALSE}
+library(mvtnorm)
+# Two variables - Show eigenvectors on contour plot
+mu<-c(15, 20)
+sigma<-matrix(data = c(1, 0.5, 0.5, 1.25), nrow = 2, ncol = 2, byrow = TRUE)
+#sigma<-matrix(data = c(1, 0.5, 0.5, 0.26), nrow = 2, ncol = 2, byrow = TRUE)
+x1<-seq(from = 10, to = 25, by = 0.1)
+x2<-seq(from = 10, to = 25, by = 0.1)
+all.x<-expand.grid(x1, x2) #Creates all possible combinations
+eval.fx<-dmvnorm(x = all.x, mean = mu, sigma = sigma)
+fx<-matrix(data = eval.fx, nrow = length(x1), ncol = length(x2), byrow = FALSE)
+par(pty = "s")
+contour(x = x1, y = x2, z = fx,
+main = expression(paste("Multivariate normal contour plot with eigenvectors for ", Sigma)),
+xlab = expression(x[1]), ylab = expression(x[2]), xlim = c(-10,30), ylim = c(-10, 30),
+levels = c(0.01, 0.001))
+#panel.first = grid() does not work quite right so use abline()
+abline(h = seq(from = -10, to = 30, by = 10), lty = "dotted", col = "lightgray")
+abline(v = seq(from = -10, to = 30, by = 10), lty = "dotted", col = "lightgray")
+#Put in lines at x1 = 0 and x2 = 0
+abline(h = 0, lwd = 2)
+abline(v = 0, lwd = 2)
+save.eig<-eigen(sigma)
+save.eig$values
+save.eig$vectors
+arrows(x0 = 0, y0 = 0, x1 = 10*save.eig$vectors[1,1], y1 = 10*save.eig$vectors[2,1], col = "red",lty = "solid")
+arrows(x0 = 0, y0 = 0, x1 = 10*save.eig$vectors[1,2], y1 = 10*save.eig$vectors[2,2], col = "red",lty = "solid")
+```

@@ -1,0 +1,392 @@
+---
+title: "CHOE.JONGWOOK-HW4"
+author: "JONG-WOOK-CHOE"
+output:
+  html_document:
+    df_print: paged
+---
+BOOK HOMEWORK
+
+1. (a) The QQ plot given the points are close to the line therefore it is approximately normal.
+
+   (b) The plot shows normality and constant variance which means there are no outlier.
+   
+   (c) The error verse fit means plot is equal and vertically spread. Therefore it approximately has             equal variance. 
+   
+   (d) Since there are no outliers it doesn't need to remove any observations.
+       
+2. (a) Since the p-value "(0.8587) > $\alpha$" is bigger than any reasonable value of $\alpha$, the value        of $e_{ij}$ are normal.
+
+   (b) Since the p-value "(0.8587) > $\alpha$" is bigger than any reasonable value of $\alpha$, the Group        variances are equal.
+   
+   (c) From both test it proved the test normality and constant variance. Therefore it is not necessary to        take transformation.
+   
+   (d) Since the normality and constant variance is proved the confidence intervals and p-value found in         HW2,3 are reliable.
+ 
+3. (a) The QQ plot given the points are close to the line but breakup at each point therefore it is not          normal. The error verse fit means plot is also not equal and vertically spread it approximately has        unequal variance. Therefore the test $e_{ij}$ are not normal and doesn't have constant variance           doesn't satisfy assumptions for ANOVA.
+
+   (b) $H_0$: The data is normally distributed
+       $H_A$: The data is not normally distributed
+   
+   (c) $H_0$: $\sigma_1^2=\sigma_2^2=...=\sigma_a^2$
+       $H_A$: At least one $\sigma_i^2$ is not equal
+   
+   (d) Since the p-value is too small group variance are unequal. 
+
+4. (a) If $\alpha=0.1$ the p-value for the Shpiro-Wilks test 0.0734 is smaller there for $e_{ij}$ can be         normal. However, if $\alpha=0.05$ or $\alpha=0.01$ the p-value is bigger there for the $e_{ij}$ is        not normal.
+
+   (b) The p-value for the Brown Forsythe test is 0.0000304 it is smaller than any reasonable $\alpha$           therefore the group variance are unequal.
+   
+   (c) Since the test is not normal and has no equal variance it needs transformation.
+   
+   (d) ln transformation, if $\lambda=0$ as the best $Y_{ij}$ transform to $Y_{ij}^*=$ln$Y_{ij}$. 
+       The model is then ln$(Y_{ij})=\mu_i+\epsilon_{ij}$
+       
+5. (a) After the Box-Cox transformation of $Y_{ij}$, diagnostic plots given shows that the points are            closer to the line. Therefore errors are closer to a normal distribution.
+
+   (b) The p-values for Shapiro-Wilks test is 0.2984 and with any reasonable $\alpha$, p-value > $\alpha$.        Therefore the values of $e_{ij}$ are normal and conclude the overall fit has improved. However,           p-value for Brown Forsythe test 0.009843 tells that group variances are still unequal because             p-value < $\alpha$.
+   
+   (c) There are some outliers but the diagnostic plots for transformation of $Y^* = ln(Y)$ shows equal          and vertical spread of residuals by group therefore the groups have constant variance.
+   
+   (d) The p-values for Shapiro-Wilks test is 0.00396 and with any reasonable $\alpha$, p-value <$\alpha$.        Therefore the values of $e_{ij}$ are not normal. However, p-value for Brown Forsythe test 0.9609          tells that group variances are equal because p-value < $\alpha$. Therefore it can't say the overall        fitness has improved.
+   
+   (e) $\lambda=0.60$ dataset is the best choice among possible three datasets. Since its overall fit has        improved from the original and better than the ln transformation it is the last option.
+
+6. (a) $Y_{ijk}=\mu_{..}+\gamma_i+\delta_j+\epsilon_{ijk}$ when $\sum_i\gamma_i=0$, $\sum_j\delta_j=0$
+       with assumptions 
+       * All subjects randomly sampled
+       * All levels of factor A independent
+       * All levels of factor B independent
+       * $\epsilon_{ijk}$~N(0,$\sigma^2_{\epsilon}$)
+       
+   (b) $Y_{ijk}=\mu_{..}+\gamma_i+\delta_j+(\gamma\delta)_{ij}+\epsilon_{ijk}$ when
+       $\sum_i\gamma_i=0$, $\sum_j\delta_j=0$, $\sum_i(\gamma\delta)_{ij}=\sum_j(\gamma\delta)_{ij}=0$
+       with assumptions 
+       * All subjects randomly sampled
+       * All levels of factor A independent
+       * All levels of factor B independent
+       * $\epsilon_{ijk}$~N(0,$\sigma^2_{\epsilon}$)
+       * $(\gamma\delta)_{ij}=\mu_{ij}+\gamma_i+\delta_j-\mu_{..}$
+   
+   (c) There is a significant effect from smoking cigarettes on sleep. The mean sleeping time of                 individuals smoking cigarettes is less than who don't.
+   
+   (d) It is less significant but there is a effect from smoking marijuana on sleep. The mean sleeping           time of smoking marijuana is less then who don't.
+   
+   (e) There is an interaction effect between smoking cigarettes and smoking marijuana on sleep. Consider        change in mean sleeping time for non smoker if person smoke marijuana the time drops. On the other        hand smoker smoke marijuana the mean sleeping time increase. Therefore there are interaction effect        between smoking cigarettes and smoking marijuana on sleep.
+
+7. (a) a-1
+
+   (b) b-1
+   
+   (c) (a-1)(b-1)
+   
+   (d) 1+(a-1)+(b-1)
+   
+   (e) 1+(a-1)+(b-1)+(a-1)(b-1)
+ 
+8. (a) The statement is False, the smaller p-value for a Shapiro-Wilks test suggests that the values of          $e_{ij}$ are not normal therefore the normality assumption of Single Factor ANOVA doesn't hold.
+
+   (b) The statement is False, for single factor ANOVA normality and equal variance both have to hold.           However, it doesn't mean that both satisfy each other.
+   
+   (c) The statement is True, in Two-Factor ANOVA with no interactions we have 1 from $\mu_{..}$, a-1 from        $\gamma_i$, and b-1 from $\delta_j$. Therefore all to sum up ( a − 1 ) + ( b − 1 ) + 1 total              parameters to estimate.
+   
+   (d) The statement is False,in Two-Factor ANOVA with interactions we add $(\gamma\delta)_{ij}$,                (a-1)(b-1). To sum up all there are ( a - 1 )( b - 1 ) + ( a − 1 ) + ( b − 1 ) + 1 total parameters        to estimate.
+ 
+
+
+R HOMEWORK
+
+I
+
+```{r, echo=FALSE, warning=FALSE}
+new.data = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/Cancer.csv")
+new.model = lm(Survival ~ Organ,data = new.data)
+qqnorm(new.model$residuals)
+qqline(new.model$residuals)
+plot(new.model$fitted.values, new.model$residuals, main = "Errors vs. Group Means",xlab = "Group Means",ylab = "Errors",pch = 19)
+abline(h = 0,col = "purple")
+```
+
+(a) The QQ plot shows that the points on each end are out from line. Also from group means vs. errors plot     it shows unequal vertically spread trend. Therefore it is not normal and has non constant variance        which violates the assumptions of ANOVA. 
+
+```{r, echo=FALSE, warning=FALSE}
+new.data$ei = new.model$residuals
+nt = nrow(new.data) 
+a = length(unique(new.data$Organ)) 
+SSE = sum(new.data$ei^2) 
+MSE = SSE/(nt-a) 
+eij.star = new.model$residuals/sqrt(MSE)
+
+alpha = 0.01
+t.cutoff= qt(1-alpha, nt-a)
+CO.eij = which(abs(eij.star) > t.cutoff)
+
+outliers = CO.eij
+new_data = new.data[-outliers,]
+new_model = lm(Survival ~ Organ,data = new_data)
+qqnorm(new_model$residuals)
+qqline(new_model$residuals)
+plot(new_model$fitted.values, new_model$residuals, main = "Errors vs. Group Means",xlab = "Group Means",ylab = "Errors",pch = 19)
+abline(h = 0,col = "purple")
+```
+
+(b) Using standardized residuals with a cutoff of $t_{1-0.01;n_t-a}$, outliers can be removed. If the         observed value is too unusual it it an outlier. New QQ plot with no residuals shows some outliers but     its overall fit has improved from the original plot. Also group means vs. errors plot shows mostly        equal and vertical spread. These all support that it has normality and equal variance.
+
+```{r, echo=FALSE, warning=FALSE}
+sp.val = shapiro.test(new_model$residuals)$p.val
+library(car)
+the.BFtest = leveneTest(ei~ Organ, data=new_data, center=median)
+p.val = the.BFtest[[3]][1]
+```
+
+(c) P-value for the Shaprio-Wilks test is `r sp.val`
+
+(d) P-value for the Brown-Forstyhe test is `r p.val`
+
+(e) `r outliers`
+
+II
+
+```{r, echo=FALSE, warning=FALSE}
+library(EnvStats)
+L1 =boxcox(new.model ,objective.name = "PPCC",optimize = TRUE)$lambda
+L2 = boxcox(new.model ,objective.name = "Shapiro-Wilk",optimize = TRUE)$lambda
+L3 = boxcox(new.data$Survival,objective.name = "Log-Likelihood",optimize = TRUE)$lambda
+```
+
+(a) The QQ plot method gives $\lambda$ = `r L1`, the Shaprio-Wilks method gives $\lambda$ = `r L2`, and       the log-likelihood method gives $\lambda$ = `r L3`.
+
+```{r, echo=FALSE, warning=FALSE}
+YT1 = (new.data$Survival^(L1)-1)/L1
+t1.data = data.frame(Survival = YT1, Organ = new.data$Organ, ei = new.model$residuals)
+t1.model = lm(Survival ~ Organ,data = t1.data)
+qqnorm(t1.model$residuals)
+qqline(t1.model$residuals)
+plot(t1.model$fitted.values, t1.model$residuals, main = "Errors vs. Group Means",xlab = "Group Means",ylab = "Errors",pch = 19)
+abline(h = 0,col = "purple")
+YT2 = (new.data$Survival^(L2)-1)/L2
+t2.data = data.frame(Survival = YT2, Organ = new.data$Organ, ei = new.model$residuals)
+t2.model = lm(Survival ~ Organ,data = t2.data)
+qqnorm(t2.model$residuals)
+qqline(t2.model$residuals)
+plot(t2.model$fitted.values, t2.model$residuals, main = "Errors vs. Group Means",xlab = "Group Means",ylab = "Errors",pch = 19)
+abline(h = 0,col = "purple")
+YT3 = log(new.data$Survival)
+t3.data = data.frame(Survival = YT3, Organ = new.data$Organ, ei = new.model$residuals)
+t3.model = lm(Survival ~ Organ,data = t3.data)
+qqnorm(t3.model$residuals)
+qqline(t3.model$residuals)
+plot(t3.model$fitted.values, t3.model$residuals, main = "Errors vs. Group Means",xlab = "Group Means",ylab = "Errors",pch = 19)
+abline(h = 0,col = "purple")
+```
+
+(b) After transforming values of $Y_{ij}$ using the $\lambda$ in (a). All three diagnostic plots for the      transformed data show more normality and equal variance. There are few outliers on the QQ-plots but       most of the points are on the line. Also the residuals by group plots show equal and vertical spread.     Therefore the transformation helped the data.
+
+```{r, echo=FALSE, warning=FALSE}
+sp1.val = shapiro.test(t1.model$residuals)$p.val
+library(car)
+the.BFtest = leveneTest(ei~ Organ, data=t1.data, center=median)
+p1.val = the.BFtest[[3]][1]
+sp2.val = shapiro.test(t2.model$residuals)$p.val
+the.BFtest = leveneTest(ei~ Organ, data=t2.data, center=median)
+p2.val = the.BFtest[[3]][1]
+sp3.val = shapiro.test(t3.model$residuals)$p.val
+the.BFtest = leveneTest(ei~ Organ, data=t3.data, center=median)
+p3.val = the.BFtest[[3]][1]
+```
+
+(c) * p-value for the Shaprio-Wilks test for the QQ plot method transformed dataset is `r sp1.val`
+    * p-value for the Shaprio-Wilks test for the Shaprio-Wilks method transformed dataset is `r sp2.val`
+    * p-value for the Shaprio-Wilks test for the log-likelihood method transformed dataset is `r sp3.val`
+    
+(d) * p-value for the Brown-Forstyhe test for the QQ plot method transformed dataset is `r p1.val`
+    * p-value for the Brown-Forstyhe test for the Shaprio-Wilks method transformed dataset is `r p2.val`
+    * p-value for the Brown-Forstyhe test for the log-likelihood method transformed dataset is `r p3.val`
+
+```{r, echo=FALSE, warning=FALSE}
+anova.table = anova(lm(Survival~Organ, data=new.data))
+pvalue=anova.table[1,5]
+anova.table = anova(lm(Survival~Organ, data=t1.data))
+p1value=anova.table[1,5]
+anova.table = anova(lm(Survival~Organ, data=t2.data))
+p2value=anova.table[1,5]
+anova.table = anova(lm(Survival~Organ, data=t3.data))
+p3value=anova.table[1,5]
+```
+  
+(e) The p-value for the hypothesis for Single Factor ANOVA is 
+    * `r pvalue` for original dataset
+    * `r p1value`, `r p2value`, and `r p3value` for transformed dataset
+    With any reasonable value of $\alpha$, p-value is smaller than $\alpha$. The null hypothesis is           rejected and conclude there are at least one different mean value from the group. However, the            original dataset doesn't hold single factor ANOVA assumption, normality and equal variance. Therefore     the transformed dataset has more reliability than the original.
+III
+
+```{r, echo=FALSE, warning=FALSE}
+trap.data = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/Trap.csv",header = TRUE)
+
+require(graphics)
+
+interaction.plot(x.factor = trap.data$Bait, trace.factor = trap.data$Location, response = trap.data$Moth,type = "l", ylab = "Moth", xlab = "Bait", col = c("red4", "orange4", "yellow4", "green4"), lty = 1, lwd = 2, trace.label = "Location", xpd = FALSE) 
+
+find.means = function(the.data,fun.name = mean){
+  a = length(unique(the.data[,2]))
+  b = length(unique(the.data[,3]))
+  means.A = by(the.data[,1], the.data[,2], fun.name)
+  means.B = by(the.data[,1],the.data[,3],fun.name)
+  means.AB = by(the.data[,1],list(the.data[,2],the.data[,3]),fun.name)
+  MAB = matrix(means.AB,nrow = b, ncol = a, byrow = TRUE)
+  colnames(MAB) = names(means.A)
+  rownames(MAB) = names(means.B)
+  MA = as.numeric(means.A)
+  names(MA) = names(means.A)
+  MB = as.numeric(means.B)
+  names(MB) = names(means.B)
+  results = list(A = MA, B = MB, AB = MAB)
+  return(results)
+}
+m.location=find.means(trap.data,mean)$A
+m.bait=find.means(trap.data,mean)$B
+m.treatment=find.means(trap.data,mean)$AB
+
+```
+(a) According to interaction plot there appear to be an interaction effect. The graph suggest that on the     lower location the number of moths in the trap tend to decrease with different baits. On the other        hand rest of the location tend to decrease when using scent as the bait but increase using sugar. The     graphs are not all parallel therefore there is an interaction effect.
+
+(b) The group means for Location is `r m.location`
+
+(c) The group means for Bait is `r m.bait`
+
+(d) The group means for all treatment levels is `r m.treatment`
+
+(e) Interaction plot showed the number of moths trapped is different for all locations.
+
+IV
+
+```{r, echo=FALSE, warning=FALSE}
+rat.data = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/rat.csv",header = TRUE)
+
+require(graphics)
+
+interaction.plot(x.factor = rat.data$Amount, trace.factor = rat.data$Type, response = rat.data$Weight,type = "l", ylab = "Weight", xlab = "Type", lty = c(1,3,5), lwd = 2, trace.label = "Type", xpd = FALSE) 
+
+m.weight=find.means(rat.data,mean)$A
+m.amount=find.means(rat.data,mean)$B
+m_treatment=find.means(rat.data,mean)$AB
+```
+(a) According to interaction plot there appear to be an interaction effect. The graph suggest that            regardless of how many amount of food given cereal showed less different. On the other hand when beef     and pork are given a lot the weight change in rats rise sharply. The graphs are not all parallel          therefore there is an interaction effect.
+
+(b) The group means for Location is `r m.weight`
+
+(c) The group means for Bait is `r m.amount`
+
+(d) The group means for all treatment levels is `r m_treatment`
+
+(e) Interaction plot showed the weight gain is different for type of food. 
+
+## Appendix
+
+```{r,eval=FALSE}
+new.data = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/Cancer.csv")
+new.model = lm(Survival ~ Organ,data = new.data)
+qqnorm(new.model$residuals)
+qqline(new.model$residuals)
+plot(new.model$fitted.values, new.model$residuals, main = "Errors vs. Group Means",xlab = "Group Means",ylab = "Errors",pch = 19)
+abline(h = 0,col = "purple")
+new.data$ei = new.model$residuals
+nt = nrow(new.data) 
+a = length(unique(new.data$Organ)) 
+SSE = sum(new.data$ei^2) 
+MSE = SSE/(nt-a) 
+eij.star = new.model$residuals/sqrt(MSE)
+
+alpha = 0.01
+t.cutoff= qt(1-alpha, nt-a)
+CO.eij = which(abs(eij.star) > t.cutoff)
+
+outliers = CO.eij
+new_data = new.data[-outliers,]
+new_model = lm(Survival ~ Organ,data = new_data)
+qqnorm(new_model$residuals)
+qqline(new_model$residuals)
+plot(new_model$fitted.values, new_model$residuals, main = "Errors vs. Group Means",xlab = "Group Means",ylab = "Errors",pch = 19)
+abline(h = 0,col = "purple")
+sp.val = shapiro.test(new_model$residuals)$p.val
+library(car)
+the.BFtest = leveneTest(ei~ Organ, data=new_data, center=median)
+p.val = the.BFtest[[3]][1]
+library(EnvStats)
+L1 =boxcox(new.model ,objective.name = "PPCC",optimize = TRUE)$lambda
+L2 = boxcox(new.model ,objective.name = "Shapiro-Wilk",optimize = TRUE)$lambda
+L3 = boxcox(new.data$Survival,objective.name = "Log-Likelihood",optimize = TRUE)$lambda
+YT1 = (new.data$Survival^(L1)-1)/L1
+t1.data = data.frame(Survival = YT1, Organ = new.data$Organ, ei = new.model$residuals)
+t1.model = lm(Survival ~ Organ,data = t1.data)
+qqnorm(t1.model$residuals)
+qqline(t1.model$residuals)
+plot(t1.model$fitted.values, t1.model$residuals, main = "Errors vs. Group Means",xlab = "Group Means",ylab = "Errors",pch = 19)
+abline(h = 0,col = "purple")
+YT2 = (new.data$Survival^(L2)-1)/L2
+t2.data = data.frame(Survival = YT2, Organ = new.data$Organ, ei = new.model$residuals)
+t2.model = lm(Survival ~ Organ,data = t2.data)
+qqnorm(t2.model$residuals)
+qqline(t2.model$residuals)
+plot(t2.model$fitted.values, t2.model$residuals, main = "Errors vs. Group Means",xlab = "Group Means",ylab = "Errors",pch = 19)
+abline(h = 0,col = "purple")
+YT3 = log(new.data$Survival)
+t3.data = data.frame(Survival = YT3, Organ = new.data$Organ, ei = new.model$residuals)
+t3.model = lm(Survival ~ Organ,data = t3.data)
+qqnorm(t3.model$residuals)
+qqline(t3.model$residuals)
+plot(t3.model$fitted.values, t3.model$residuals, main = "Errors vs. Group Means",xlab = "Group Means",ylab = "Errors",pch = 19)
+abline(h = 0,col = "purple")
+sp1.val = shapiro.test(t1.model$residuals)$p.val
+library(car)
+the.BFtest = leveneTest(ei~ Organ, data=t1.data, center=median)
+p1.val = the.BFtest[[3]][1]
+sp2.val = shapiro.test(t2.model$residuals)$p.val
+the.BFtest = leveneTest(ei~ Organ, data=t2.data, center=median)
+p2.val = the.BFtest[[3]][1]
+sp3.val = shapiro.test(t3.model$residuals)$p.val
+the.BFtest = leveneTest(ei~ Organ, data=t3.data, center=median)
+p3.val = the.BFtest[[3]][1]
+anova.table = anova(lm(Survival~Organ, data=new.data))
+pvalue=anova.table[1,5]
+anova.table = anova(lm(Survival~Organ, data=t1.data))
+p1value=anova.table[1,5]
+anova.table = anova(lm(Survival~Organ, data=t2.data))
+p2value=anova.table[1,5]
+anova.table = anova(lm(Survival~Organ, data=t3.data))
+p3value=anova.table[1,5]
+trap.data = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/Trap.csv",header = TRUE)
+
+require(graphics)
+
+interaction.plot(x.factor = trap.data$Bait, trace.factor = trap.data$Location, response = trap.data$Moth,type = "l", ylab = "Moth", xlab = "Bait", col = c("red4", "orange4", "yellow4", "green4"), lty = 1, lwd = 2, trace.label = "Location", xpd = FALSE) 
+
+find.means = function(the.data,fun.name = mean){
+  a = length(unique(the.data[,2]))
+  b = length(unique(the.data[,3]))
+  means.A = by(the.data[,1], the.data[,2], fun.name)
+  means.B = by(the.data[,1],the.data[,3],fun.name)
+  means.AB = by(the.data[,1],list(the.data[,2],the.data[,3]),fun.name)
+  MAB = matrix(means.AB,nrow = b, ncol = a, byrow = TRUE)
+  colnames(MAB) = names(means.A)
+  rownames(MAB) = names(means.B)
+  MA = as.numeric(means.A)
+  names(MA) = names(means.A)
+  MB = as.numeric(means.B)
+  names(MB) = names(means.B)
+  results = list(A = MA, B = MB, AB = MAB)
+  return(results)
+}
+m.location=find.means(trap.data,mean)$A
+m.bait=find.means(trap.data,mean)$B
+m.treatment=find.means(trap.data,mean)$AB
+rat.data = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/rat.csv",header = TRUE)
+
+require(graphics)
+
+interaction.plot(x.factor = rat.data$Amount, trace.factor = rat.data$Type, response = rat.data$Weight,type = "l", ylab = "Weight", xlab = "Type", lty = c(1,3,5), lwd = 2, trace.label = "Type", xpd = FALSE) 
+
+m.weight=find.means(rat.data,mean)$A
+m.amount=find.means(rat.data,mean)$B
+m_treatment=find.means(rat.data,mean)$AB
+```

@@ -1,0 +1,157 @@
+---
+title: "CHOE.JONGWOOK-HW5"
+author: "JONG-WOOK-CHOE"
+output: pdf_document
+---
+
+I. 
+
+```{r, echo=FALSE}
+cereal=read.csv("/Users/Bosco/Desktop/SPRING2021/STA 135/data/cereal.csv")
+qqnorm(cereal[,5],main="Sugar Q-Q Plot")
+qqline(cereal[,5], col='red')
+qqnorm(cereal[,6],main="Fat Q-Q Plot")
+qqline(cereal[,6], col='red')
+qqnorm(cereal[,7],main="Sodium Q-Q Plot")
+qqline(cereal[,7], col='red')
+```
+
+(a) Each of Q-Q plot shows marginal normality of the variables. However, it seems there might be outliers; notice two points in the upper-right and lower-left corner of the Q-Q plots.
+
+```{r, echo=FALSE}
+cerealdata=cereal[,5:7]
+Xn<-colMeans(cerealdata)
+Sn<-var(cerealdata)
+Sninv<-solve(Sn)
+datachisq<-diag(t(t(cerealdata)-Xn)%*%Sninv%*%(t(cerealdata)-Xn))
+qqplot(qchisq(ppoints(500), df = 3), datachisq,
+main = expression("Chi-square plot for" ~~ {chi^2}[nu == 3]))
+qqline(datachisq,distribution=function(p) qchisq(p, df = 3))
+```
+
+For the most part the chi-square plot is skewed to the left but it shows a linear pattern. There is a point, upper right corner, which shows deviation from the linear trend. It may indicate that it is a outlier.
+
+```{r, echo=FALSE}
+library(RVAideMemoire)
+mqqnorm(cerealdata,main="Q-Q plot of Mahalanobis D^2 VS. quantiles of Chi^2")
+```
+
+(b) The chi-square Q-Q plot shows a linear pattern. Therefore it indicated it follows multivariate normal distribution.
+
+"A popular way to identify and deal with multivariate outliers is to use Mahalanobis Distance. It calculates the distance of each case from the central mean. Larger values indicate that a case is farther from where most of the points cluster."
+
+Therefore, #26 and #25 are the two outliers from the plot.
+
+II.
+
+```{r, echo=FALSE}
+p<-3
+N<-40
+mu.hat<-colMeans(cerealdata)
+sigma.hat<-cov(cerealdata)
+mu.Ho<-c(9.8,1.7,156.8)
+T.sq<-N*t(mu.hat-mu.Ho)%*%solve(sigma.hat)%*%(mu.hat-mu.Ho)
+test.stat<-(N-p)/(p*(N-1))*T.sq
+crit.val<-qf(0.95, p, N-p)
+p.value<-1-pf((N-p)/(p*(N-1))*T.sq, p, N-p)
+round(data.frame(T.sq, test.stat, crit.val, p.value), 3)
+```
+
+(a) $T^2$ for testing the null hypothesis $H_0:\mu=[9.8,1.7,156.8]^T$ is 19.742 where $\mu_1,\mu_2,$and$\mu_3$ represent the population mean of sugar, fat, and sodium cereal contain.
+
+(b) $E(t)=0$
+    $Var(t)=\frac{n-1}{n-3}$
+    $T^2$~[0,1.05]
+
+(c) Using the results in the previous parts, $H_0$ at the level $\alpha=0.01$ is smaller than the p-value. Therefore we fail to reject the null at the $\alpha$ level and conclude that the population true vector mean is $\mu=\mu_0=[9.8,1.7,156.8]^T$
+
+(d) With more reasonable $H_0$ at the level $\alpha=0.05$ p-value is smaller than the critical level therefore we reject our null hypothesis and conclude that $\mu\not=[9.8,1.7,156.8]^T$
+
+III.
+
+```{r, echo=FALSE}
+sweat=read.table("/Users/Bosco/Desktop/SPRING2021/STA 135/data/Sweet_data.txt")
+colnames(sweat)=c("sweet_rate","sodium","potassium")
+p<-3
+N<-20
+mu.hat<-colMeans(sweat)
+sigma.hat<-var(sweat)
+mu.Ho<-c(3.5,45,15)
+T.sq<-N*t(mu.hat-mu.Ho)%*%solve(sigma.hat)%*%(mu.hat-mu.Ho)
+test.stat<-(N-p)/(p*(N-1))*T.sq
+crit.val<-qf(0.95, p, N-p)
+p.value<-1-pf((N-p)/(p*(N-1))*T.sq, p, N-p)
+round(data.frame(T.sq, test.stat, crit.val, p.value), 5)
+```
+
+Since the p-value is 1.755542e-08, it is too small at any reasonable $\alpha$ and we reject our null hypothesis. Therefore conclude that the true population vector mean of the sweat data $\mu$ is not the hypothesized mean $\mu\not=[3.5,45,15]^T$
+
+IV.
+
+```{r, echo=FALSE}
+BF.Lowermu1<-mu.hat[1]-qt(1-(0.05/2),N-1)*sqrt(sigma.hat[1,1]/N)
+BF.Uppermu1<-mu.hat[1]+qt(1-(0.05/2),N-1)*sqrt(sigma.hat[1,1]/N)
+BF.Lowermu2<-mu.hat[2]-qt(1-(0.05/2),N-1)*sqrt(sigma.hat[2,2]/N)
+BF.Uppermu2<-mu.hat[2]+qt(1-(0.05/2),N-1)*sqrt(sigma.hat[2,2]/N)
+BF.Lowermu3<-mu.hat[3]-qt(1-(0.05/2),N-1)*sqrt(sigma.hat[3,3]/N)
+BF.Uppermu3<-mu.hat[3]+qt(1-(0.05/2),N-1)*sqrt(sigma.hat[3,3]/N)
+BF.CI4mu1<-c(BF.Lowermu1,BF.Uppermu1)
+BF.CI4mu2<-c(BF.Lowermu2,BF.Uppermu2)
+BF.CI4mu3<-c(BF.Lowermu3,BF.Uppermu3)
+round(data.frame(BF.CI4mu1, BF.CI4mu2, BF.CI4mu3), 2)
+```
+On the cereal data testing equality of mean sugar, fat, and sodium, content across different shelf using Berforoni's method tells the simultaneous confidence intervals for $\mu_1$, $\mu_2$, and $\mu_3$. Therefore with 95% confident each $\mu$ stays between (3.85 5.43), (38.78 52.02), and (9.07 10.86) using the bonferroni correction.
+
+## Appendix
+
+```{r,eval=FALSE}
+cereal=read.csv("/Users/Bosco/Desktop/SPRING2021/STA 135/data/cereal.csv")
+qqnorm(cereal[,5],main="Sugar Q-Q Plot")
+qqline(cereal[,5], col='red')
+qqnorm(cereal[,6],main="Fat Q-Q Plot")
+qqline(cereal[,6], col='red')
+qqnorm(cereal[,7],main="Sodium Q-Q Plot")
+qqline(cereal[,7], col='red')
+cerealdata=cereal[,5:7]
+Xn<-colMeans(cerealdata)
+Sn<-var(cerealdata)
+Sninv<-solve(Sn)
+datachisq<-diag(t(t(cerealdata)-Xn)%*%Sninv%*%(t(cerealdata)-Xn))
+qqplot(qchisq(ppoints(500), df = 3), datachisq,
+main = expression("Chi-square plot for" ~~ {chi^2}[nu == 3]))
+qqline(datachisq,distribution=function(p) qchisq(p, df = 3))
+library(RVAideMemoire)
+mqqnorm(cerealdata,main="Q-Q plot of Mahalanobis D^2 VS. quantiles of Chi^2")
+p<-3
+N<-40
+mu.hat<-colMeans(cerealdata)
+sigma.hat<-cov(cerealdata)
+mu.Ho<-c(9.8,1.7,156.8)
+T.sq<-N*t(mu.hat-mu.Ho)%*%solve(sigma.hat)%*%(mu.hat-mu.Ho)
+test.stat<-(N-p)/(p*(N-1))*T.sq
+crit.val<-qf(0.95, p, N-p)
+p.value<-1-pf((N-p)/(p*(N-1))*T.sq, p, N-p)
+round(data.frame(T.sq, test.stat, crit.val, p.value), 3)
+sweat=read.table("/Users/Bosco/Desktop/SPRING2021/STA 135/data/Sweet_data.txt")
+colnames(sweat)=c("sweet_rate","sodium","potassium")
+p<-3
+N<-20
+mu.hat<-colMeans(sweat)
+sigma.hat<-var(sweat)
+mu.Ho<-c(3.5,45,15)
+T.sq<-N*t(mu.hat-mu.Ho)%*%solve(sigma.hat)%*%(mu.hat-mu.Ho)
+test.stat<-(N-p)/(p*(N-1))*T.sq
+crit.val<-qf(0.95, p, N-p)
+p.value<-1-pf((N-p)/(p*(N-1))*T.sq, p, N-p)
+round(data.frame(T.sq, test.stat, crit.val, p.value), 5)
+BF.Lowermu1<-mu.hat[1]-qt(1-(0.05/2),n-1)*sqrt(sigma.hat[1,1]/n)
+BF.Uppermu1<-mu.hat[1]+qt(1-(0.05/2),n-1)*sqrt(sigma.hat[1,1]/n)
+BF.Lowermu2<-mu.hat[2]-qt(1-(0.05/2),n-1)*sqrt(sigma.hat[2,2]/n)
+BF.Uppermu2<-mu.hat[2]+qt(1-(0.05/2),n-1)*sqrt(sigma.hat[2,2]/n)
+BF.Lowermu3<-mu.hat[3]-qt(1-(0.05/2),n-1)*sqrt(sigma.hat[3,3]/n)
+BF.Uppermu3<-mu.hat[3]+qt(1-(0.05/2),n-1)*sqrt(sigma.hat[3,3]/n)
+BF.CI4mu1<-c(BF.Lowermu1,BF.Uppermu1)
+BF.CI4mu2<-c(BF.Lowermu2,BF.Uppermu2)
+BF.CI4mu3<-c(BF.Lowermu3,BF.Uppermu3)
+round(data.frame(BF.CI4mu1, BF.CI4mu2, BF.CI4mu3), 2)
+```

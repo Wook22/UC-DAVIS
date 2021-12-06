@@ -1,0 +1,580 @@
+---
+title: "CHOE.JONGWOOK-HW6"
+author: "JONG-WOOK-CHOE"
+output: pdf_document
+---
+BOOK HOMEWORK
+
+1. (a) Overall trend for factor A regardless of interactions come from understanding difference in $\hat\mu_{i.}$. From low to high dosage of the first ingredient A the number of hours of relief increased.
+
+   (b) Overall trend for factor B regardless of interactions come from understanding difference in $\hat\mu_{.j}$. From low to high dosage of the first ingredient B the number of hours of relief increased.
+   
+   (c) Making multiple confidence interval for an ANOVA model to build 6 pairwise confidence interval Turkey correction is used because its interest in all possible pairwise comparisons. Bonferroni correction which can be used for all also can be used to get confidence interval.
+   
+   (d) Med level of factor A increased the number of hours of relief most. Comparing the sample mean with Med level of factor A had the largest difference between means. Therefore it is the most important for increasing the number of hours of relief.  
+   
+2. 
+
+```{r, eval=FALSE, echo=FALSE}
+find.mult = function(alpha,a,b,dfSSE,g,group){
+if(group == "A"){
+Tuk = round(qtukey(1-alpha,a,dfSSE)/sqrt(2),3)
+Bon = round(qt(1-alpha/(2*g), dfSSE ) ,3)
+Sch = round(sqrt((a-1)*qf(1-alpha, a-1, dfSSE)),3)
+}else if(group == "B"){
+Tuk = round(qtukey(1-alpha,b,dfSSE)/sqrt(2),3)
+Bon = round(qt(1-alpha/(2*g), dfSSE ) ,3)
+Sch = round(sqrt((b-1)*qf(1-alpha, b-1, dfSSE)),3)
+}else if(group == "AB"){
+Tuk = round(qtukey(1-alpha,a*b,dfSSE)/sqrt(2),3)
+Bon = round(qt(1-alpha/(2*g), dfSSE ) ,3)
+Sch = round(sqrt((a*b-1)*qf(1-alpha, a*b-1, dfSSE)),3)
+}
+results = c(Bon, Tuk,Sch)
+names(results) = c("Bonferroni","Tukey","Scheffe")
+return(results)
+}
+all.mult = find.mult(alpha = 0.05, a = 3, b = 3, dfSSE = 36 - 3*3, g = 3, group = "AB")
+Bon = all.mult[1]
+Tuk = all.mult[2]
+Sch = all.mult[3]
+MSE=1.63/(36-9)
+sg=sqrt(MSE/9*(1/12+1/12+1/12))
+call.mult = find.mult(alpha = 0.01, a = 3, b = 3, dfSSE = 36 - 3*3, g = 3, group = "AB")
+cBon = call.mult[1]
+cTuk = call.mult[2]
+cSch = call.mult[3]
+csg=sqrt(MSE*(1/12+1/12))
+eall.mult = find.mult(alpha = 0.1, a = 3, b = 3, dfSSE = 36 - 3*3, g = 3, group = "AB")
+eBon = call.mult[1]
+eTuk = call.mult[2]
+eSch = call.mult[3]
+esg=sqrt(MSE*(1/4+1/4))
+```
+
+   (a) 95% corrected confidence intervals for $\mu_{1.}$ is
+       Bonferroni 
+       $\hat\mu_{1.}±B\sqrt{\frac{MSE}{b^2}\sum_j\frac{1}{n_{ij}}}$
+       $=4.63±2.552*0.04095064$
+       $=4.63±0.104506$ 
+       (4.525494,4.734506) at df{MSE}
+       
+       95% corrected confidence intervals for $\mu_{.1}$ is
+       $\hat\mu_{.1}±B\sqrt{\frac{MSE}{a^2}\sum_i\frac{1}{n_{ij}}}$
+       $=3.88±2.552*0.04095064$
+       $=3.88±0.104506$ 
+       (3.775494,3.984506) at df{MSE}
+
+   (b) The result shows that 95% confident that the true average hours of relief for low dosages of A ingredient relies between 4.525494 and 4.734506. Also, the true average hours of relief for low dosages of B ingredient relies between 3.775494 and 3.984506
+   
+   (c) 99% corrected confidence intercals for $\mu_{1.}-\mu_{3.}$ is
+       $(\bar{Y_{1.}}-\bar{Y_{3.}})±T\sqrt{MSE(\frac{1}{n_{1.}}+\frac{1}{n_{3.}})}$
+       $=(4.63-8.98)±4.046*0.1003082$
+       $=-4.35±0.405847$
+       (-4.755847,-3.944153) at df{MSE}
+   
+       99% corrected confidence intercals for $\mu_{.1}-\mu_{.3}$ is
+       $(\bar{Y_{.1}}-\bar{Y_{.3}})±T\sqrt{MSE(\frac{1}{n_{.1}}+\frac{1}{n_{.3}})}$
+       $=(3.88-9.83)±4.046*0.1003082$
+       $=-5.95±0.405847$
+       (-6.355847,-5.544153) at df{MSE}
+   
+   (d) The result shows that 99% confident that the true average hours of relief for low dose A is smaller than that of hight dose A by between 3.944153 and 4.755847 hours. Also, 99% confident that the true average hours of relief for low dose B is smaller than that of high dose B by between 5.544153 and 6.355847 hours
+   
+   (e) 90% corrected confidence intercals for $\mu_{11}-\mu_{13}$ is
+       $(\hat{Y_{11}}-\hat{Y_{13}})±T\sqrt{MSE(\frac{1}{n_{.1}}+\frac{1}{n_{.3}})}$
+       $=(2.88-5.97)±4.046 *0.1737388$
+       $=-3.09±0.7029472$
+       (-3.792947,-2.387053) at df{MSE}
+   
+3. (a) Interval from 2(a) can't tell that there is a significant difference in the average hours of relief for the low dosages of the two drugs. There are approximately 0.75 difference between two drugs but that is all it can tell from the result.
+
+   (b) Interval from 2(c) doesn't include 0 which suggest that there is a significant differences in the average hours of relief for high vs. low of each drug. Therefore the true average hours of relief for low dose is smaller than that of high dose for both drugs. 
+   
+   (c) Interval from 2(e) doesn't include 0 which suggest that there is a significant difference in the average hours of relief for those on the low dose of drug A, and on High vs. Low of drug B. Result shows that there is a 90% confident that the number of hours of relief in low dose of drug A and low of drug B is smaller than the low dose of drug A and high of drug B.
+   
+   (d) Since the High dosage of ingredient A and B has the largest hours of relief, for someone with severe allergy symptoms High dose of both drugs is suggested.
+   
+4. (a) The bounds of a weighted vs. unweighted confidence interval change estimate of the mean and standard deviations. However, the estimate for a confidence interval for $\mu_{ij}$ does not change.
+
+   (b) The gender of the subject is suggest to be equally weighted. 
+   
+   (c) Giving smokers vs. non-smokers unequal weights may be appropriate if the study want to focus on difference lung capacity of smoke status.
+   
+   (d) Giving smokers vs. non-smokers equal weights may be appropriate if the study want to focus on difference lung capacity of gender.
+   
+5. (a) The 95% equally weighted, corrected confidence interval for $\mu_{1.}-\mu_{1.}$ shows the lung capacity of the female is smaller than male by between 0.84 and 2.18 than male.  
+
+   (b) The interval from (a) suggest the maximum difference lung capacity comparing female and male is 2.18. Therefore female to have an average of 3 liters lower lung capacity compared to a male is unusal.
+   
+   (c) The 95% unequally weighted, corrected confidence interval for $\mu_{.1}-\mu_{.2}$ shows the lung capacity of the nonsmoker is bigger than smoker by between 1.82 and 2.45.
+   
+   (d) The interval from (c) suggest a significant difference in the average lung capacity for smokers vs. non-smokers since the interval doesn't include 0 with positive value.
+   
+6. (a) The 95% corrected confidence intervals for $\mu_{11}-\mu_{12}$ and $\mu_{21}-\mu_{22}$ are  (0.4, 2.6) and (1.84, 4.46). Both intervals doesn't include 0 with positive value. Therefore in both female and male subject person who not smoke is likely to have more lung capacity than who smoke.
+
+   (b) The minimum difference between female smokers and female non-smokers suggested by (a) is too small based on unequally weighted interval from 5(c). 
+   
+   (c) The minimum difference between female smokers and female non-smokers suggested by (a) is reasonable based on unequally weighted interval from 5(c). 
+   
+   (d) $\beta_i=${$\beta_0,\beta_1,\beta_2$}
+       when $\beta_0=7.30=$ True average of Y when in $a_1$ of A, $b_1$ of B
+            $\beta_1=1.32$ True average of Y when comparing $a_2$ to $a_1$ in $b_1$ of B
+            $\beta_2=-2.180$ True average of Y when comparing $b_2$ to $b_1$ in $a_1$ of A
+               
+7. (a) The statement is False, confidence interval for a contrast of $\mu_{ij}$ shows statistical difference between estimated sample means.
+
+   (b) The statement is True, since Bonferroni multiplier can be used in all situation, it is appropriate to use with contrast 
+   
+   (c) The statement is False, the Scheffe multiplier may be used for creating confidence intervals when it is contrast of any type.
+    
+   (d) The statement is True, in the regression formation of Two factor ANOVA without interaction there are (a-1) X's to describe a variable with "a" categories. Also, same with "b" categories. Therefore the total number of $\beta$'s is:( a -1 ) + ( b - 1 ) + 1 = a + b - 1
+   
+R HOMEWORK
+
+I
+
+```{r echo=FALSE, warning=FALSE}
+the.data = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/Prog.csv",header = TRUE)
+nt = nrow(the.data)
+a = length(unique(the.data[,2]))
+b = length(unique(the.data[,3]))
+names(the.data) = c("Y","A","B")
+find.mult = function(alpha,a,b,dfSSE,g,group){
+if(group == "A"){
+Tuk = round(qtukey(1-alpha,a,dfSSE)/sqrt(2),3)
+Bon = round(qt(1-alpha/(2*g), dfSSE ) ,3)
+Sch = round(sqrt((a-1)*qf(1-alpha, a-1, dfSSE)),3)
+}else if(group == "B"){
+Tuk = round(qtukey(1-alpha,b,dfSSE)/sqrt(2),3)
+Bon = round(qt(1-alpha/(2*g), dfSSE ) ,3)
+Sch = round(sqrt((b-1)*qf(1-alpha, b-1, dfSSE)),3)
+}else if(group == "AB"){
+Tuk = round(qtukey(1-alpha,a*b,dfSSE)/sqrt(2),3)
+Bon = round(qt(1-alpha/(2*g), dfSSE ) ,3)
+Sch = round(sqrt((a*b-1)*qf(1-alpha, a*b-1, dfSSE)),3)
+}
+results = c(Bon, Tuk,Sch)
+names(results) = c("Bonferroni","Tukey","Scheffe")
+return(results)
+}
+find.means = function(the.data,fun.name = mean){
+a = length(unique(the.data[,2]))
+b = length(unique(the.data[,3]))
+means.A = by(the.data[,1], the.data[,2], fun.name)
+means.B = by(the.data[,1],the.data[,3],fun.name)
+means.AB = by(the.data[,1],list(the.data[,2],the.data[,3]),fun.name)
+MAB = matrix(means.AB,nrow = b, ncol = a, byrow = TRUE)
+colnames(MAB) = names(means.A)
+rownames(MAB) = names(means.B)
+MA = as.numeric(means.A)
+names(MA) = names(means.A)
+MB = as.numeric(means.B)
+names(MB) = names(means.B)
+MAB = t(MAB)
+results = list(A = MA, B = MB, AB = MAB)
+return(results)
+}
+scary.CI = function(the.data,MSE,equal.weights = TRUE,multiplier,group,cs){
+if(sum(cs) != 0 & sum(cs !=0 ) != 1){
+return("Error - you did not input a valid contrast")
+}else{
+the.means = find.means(the.data)
+the.ns =find.means(the.data,length)
+nt = nrow(the.data)
+a = length(unique(the.data[,2]))
+b = length(unique(the.data[,3]))
+if(group =="A"){
+if(equal.weights == TRUE){
+a.means = rowMeans(the.means$AB)
+est = sum(a.means*cs)
+mul = rowSums(1/the.ns$AB)
+SE = sqrt(MSE/b^2 * (sum(cs^2*mul)))
+N = names(a.means)[cs!=0]
+CS = paste("(",cs[cs!=0],")",sep = "")
+fancy = paste(paste(CS,N,sep =""),collapse = "+")
+names(est) = fancy
+} else{
+a.means = the.means$A
+est = sum(a.means*cs)
+SE = sqrt(MSE*sum(cs^2*(1/the.ns$A)))
+N = names(a.means)[cs!=0]
+CS = paste("(",cs[cs!=0],")",sep = "")
+fancy = paste(paste(CS,N,sep =""),collapse = "+")
+names(est) = fancy
+}
+}else if(group == "B"){
+if(equal.weights == TRUE){
+b.means = colMeans(the.means$AB)
+est = sum(b.means*cs)
+mul = colSums(1/the.ns$AB)
+SE = sqrt(MSE/a^2 * (sum(cs^2*mul)))
+N = names(b.means)[cs!=0]
+CS = paste("(",cs[cs!=0],")",sep = "")
+fancy = paste(paste(CS,N,sep =""),collapse = "+")
+names(est) = fancy
+} else{
+b.means = the.means$B
+est = sum(b.means*cs)
+SE = sqrt(MSE*sum(cs^2*(1/the.ns$B)))
+N = names(b.means)[cs!=0]
+CS = paste("(",cs[cs!=0],")",sep = "")
+fancy = paste(paste(CS,N,sep =""),collapse = "+")
+names(est) = fancy
+}
+} else if(group == "AB"){
+est = sum(cs*the.means$AB)
+SE = sqrt(MSE*sum(cs^2/the.ns$AB))
+names(est) = "someAB"
+}
+the.CI = est + c(-1,1)*multiplier*SE
+results = c(est,the.CI)
+names(results) = c(names(est),"lower bound","upper bound")
+return(results)
+}
+}
+the.means = find.means(the.data)
+the.model = lm(Y ~ A*B, data = the.data)
+SSE = sum(the.model$residuals^2)
+MSE = SSE/(nt-a*b)
+Bon = find.mult(alpha = 0.05, a = 2, b = 3, dfSSE = 24 - 2*3, g = 1, group = "A")[1]
+A.cs.1 = c(0,1)
+A.cs.2 = c(1,-1)
+#Confidence interval for first factor level of factor A:
+Ia=scary.CI(the.data,MSE,equal.weights = TRUE,Bon,"A",A.cs.1)[2:3]
+Ie=scary.CI(the.data,MSE,equal.weights = TRUE,Bon,"A",A.cs.2)[2:3]
+Tuk = find.mult(alpha = 0.1, a = 2, b = 3, dfSSE = 24 - 2*3, g = 1, group = "B")[2]
+B.cs.1 = c(1,-1,0)
+B.cs.2 = c(1,0,-1)
+Ib1=scary.CI(the.data,MSE,equal.weights = FALSE,Tuk,"B",B.cs.1)[2:3]
+Ib2=scary.CI(the.data,MSE,equal.weights = FALSE,Tuk,"B",B.cs.2)[2:3]
+Sch = find.mult(alpha = 0.01, a = 2, b = 3, dfSSE = 24 - 2*3, g = 1, group = "AB")[3]
+AB.cs = matrix(0,nrow = a, ncol = b)
+AB.cs[1,1] = 1
+AB.cs[2,1] = -1
+Ic1=scary.CI(the.data,MSE,equal.weights = TRUE,Sch,"AB",AB.cs)[2:3]
+AB.cs = matrix(0,nrow = a, ncol = b)
+AB.cs[1,3] = 1
+AB.cs[2,3] = -1
+Ic2=scary.CI(the.data,MSE,equal.weights = TRUE,Sch,"AB",AB.cs)[2:3]
+```
+
+(a) The 95% confidence interval for $\mu_{1.}$ using a Bonferroni multiplier `r Ia`
+
+(b) The 90% confidence interval for $\mu_{.1}-\mu_{.2}$ using Tukey multiplier `r Ib1`
+
+    The 90% confidence interval for $\mu_{.1}-\mu_{.3}$ using Tukey multiplier `r Ib2`
+
+(c) The 99% confidence interval for $\mu_{11}-\mu_{21}$ using Scheffe multiplier `r Ic1`
+
+    The 99% confidence interval for $\mu_{13}-\mu_{23}$ using Scheffe multiplier `r Ic2`
+
+(d) The first result shows overall 99% confident that out of subject in new workers who worked under five years, true average days it took for a programmer to complete a large project using small system and both small and large system has no significant difference. 
+Second interval shows overall 99% confident that out of subject in experienced workers who worked over 10 years, true average days it took for a programmer to complete a large project using small system is smaller than using both small and large system by between 130 to 190 days
+
+(e) The largest difference from programmers with difference level of type is 89 days, $\mu_{1.}-\mu_{2.}$.
+
+(f) The statement is True, interval from I(b) suggest that there are significant difference in days it took for a programmer to complete a large project with different years of experience. Among them Experienced workers who worked over 10 years tend to show lower averages than the other categories.
+
+II
+
+```{r, echo=FALSE, warning=FALSE}
+the.model = lm(Y ~ A*B,data = the.data)
+b0=the.model$coefficients[1]
+b1=the.model$coefficients[2]
+b2=the.model$coefficients[3]
+b3=the.model$coefficients[4]
+b4=the.model$coefficients[5]
+b5=the.model$coefficients[6]
+IIa = length(the.model$coefficients)
+```
+
+(a) The regression formation of the ANOVA model with interaction is (when A = a1, a2 B = b1, b2, b3)
+    
+    $Y_i=\beta_0+\beta_1X_{a2}+\beta_2X_{b2}+\beta_3X_{b3}+\beta_4X_{a2}X_{b2}+\beta_5X_{a2}X_{b3}$
+    
+    Therefore there are total `r IIa` estimated parameters in the model.
+
+(b) $b_0$=`r b0`
+Estimated average days it took for a programmer to complete a large project using small system with new workers who worked under 5 years.
+
+(c) $b_1$=`r b1`
+Estimated average difference of days it took for a programmer to complete a large project when comparing who use both small and large systems to who only use small system in ew workers who worked under 5 years.
+
+(d) $b_4=\hat\mu_{22}-\hat\mu_{21}-\hat\mu_{12}+\hat\mu_{11}$=`r b4`
+
+(e) $b_5=\hat\mu_{23}-\hat\mu_{13}-\hat\mu_{21}+\hat\mu_{11}$=`r b5`
+
+
+III
+
+(a)
+
+```{r, echo=FALSE, warning=FALSE}
+new.data=read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/Teaching.csv",header = TRUE)
+interaction.plot(x.factor = new.data$Method, trace.factor = new.data$Room, response = new.data$Scores, type = "l", ylab = "Scores", xlab = "Method", col = c("red4", "blue4"), lty = 1, lwd = 2, trace.label = "Location", xpd = FALSE)
+find.means = function(the.data,fun.name = mean){
+a = length(unique(the.data[,2]))
+b = length(unique(the.data[,3]))
+means.A = by(the.data[,1], the.data[,2], fun.name)
+means.B = by(the.data[,1],the.data[,3],fun.name)
+means.AB = by(the.data[,1],list(the.data[,2],the.data[,3]),fun.name)
+MAB = matrix(means.AB,nrow = b, ncol = a, byrow = TRUE)
+colnames(MAB) = names(means.A)
+rownames(MAB) = names(means.B)
+MA = as.numeric(means.A)
+names(MA) = names(means.A)
+MB = as.numeric(means.B)
+names(MB) = names(means.B)
+MAB = t(MAB)
+results = list(A = MA, B = MB, AB = MAB)
+return(results)
+}
+IIIb1=find.means(new.data,mean)$A
+IIIb2=find.means(new.data,mean)$B
+IIIb3=find.means(new.data,mean)$AB
+n = nrow(new.data)
+
+AB =lm( Scores ~ Method * Room,data = new.data)
+A.B = lm( Scores~  Method + Room, data = new.data)
+A = lm(Scores ~ Method, data = new.data)
+B = lm(Scores ~ Room, data = new.data)
+N0 = lm(Scores ~ 1, data = new.data)
+AllM = list(AB, A.B, A, B, N0)
+SSEs = round(sapply(AllM, function(i) sum(i$residual^2)),2)
+
+SSEF = SSEs[1]
+SSER = SSEs[2]
+
+a = length(unique(new.data[,2]))
+b = length(unique(new.data[,3]))
+df.F= n - a*b
+df.R = n -(a-1)-(b-1)-1
+FN = round((SSER - SSEF)/(df.R - df.F),4)
+FD = round(SSEF/df.F,4)
+Fs = round(FN/FD,4)
+
+results = anova(A.B,AB)
+t.test = results[2,5]
+p.val = results[2,6]
+
+new.model = lm(Scores ~ Method*Room, data = new.data)
+IIIb0=new.model$coefficients[1]
+IIIb1=new.model$coefficients[2]
+IIIb2=new.model$coefficients[3]
+IIIb3=new.model$coefficients[4]
+IIIb4=new.model$coefficients[5]
+IIIb5=new.model$coefficients[6]
+IIIb6=new.model$coefficients[7]
+IIIb7=new.model$coefficients[8]
+```
+
+(b) Factor means are `r IIIb1`, `r IIIb2`, and treatment mean is `r IIIb3`.
+
+(c) Total sample sizes are `r n`.
+
+(d) The p-value is `r p.val`, with test-statistic `r t.test` With $\alpha=0.01$, p-value < $\alpha$. Therefore reject null hypothesis and conclude that the model with interaction effects is a statistically better fit than the model without interaction effects between teaching Method and whether class Room is online or offline.
+
+(e) $Y_i=\beta_0+\beta_1X_{a2}+\beta_2X_{a3}+\beta_3X_{a4}+\beta_4X_{b2}+\beta_5X_{a2}X_{b2}+\beta_6X_{a3}X_{b2}+\beta_7X_{a4}X_{b2}$
+
+   when b0= `r IIIb0`
+        b1= `r IIIb1`
+        b2= `r IIIb2`
+        b3= `r IIIb3`
+        b4= `r IIIb4`
+        b5= `r IIIb5`
+        b6= `r IIIb6`
+        b7= `r IIIb7`
+        
+(f) To make pariwaise confidence interval Turkey correction is good for multiplier because its interest in all possible pairwise comparisons. Bonferroni correction which can be used for all also can be used to get confidence interval.
+
+## Appendix
+
+```{r,eval=FALSE}
+the.data = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/Prog.csv",header = TRUE)
+nt = nrow(the.data)
+a = length(unique(the.data[,2]))
+b = length(unique(the.data[,3]))
+names(the.data) = c("Y","A","B")
+find.mult = function(alpha,a,b,dfSSE,g,group){
+if(group == "A"){
+Tuk = round(qtukey(1-alpha,a,dfSSE)/sqrt(2),3)
+Bon = round(qt(1-alpha/(2*g), dfSSE ) ,3)
+Sch = round(sqrt((a-1)*qf(1-alpha, a-1, dfSSE)),3)
+}else if(group == "B"){
+Tuk = round(qtukey(1-alpha,b,dfSSE)/sqrt(2),3)
+Bon = round(qt(1-alpha/(2*g), dfSSE ) ,3)
+Sch = round(sqrt((b-1)*qf(1-alpha, b-1, dfSSE)),3)
+}else if(group == "AB"){
+Tuk = round(qtukey(1-alpha,a*b,dfSSE)/sqrt(2),3)
+Bon = round(qt(1-alpha/(2*g), dfSSE ) ,3)
+Sch = round(sqrt((a*b-1)*qf(1-alpha, a*b-1, dfSSE)),3)
+}
+results = c(Bon, Tuk,Sch)
+names(results) = c("Bonferroni","Tukey","Scheffe")
+return(results)
+}
+find.means = function(the.data,fun.name = mean){
+a = length(unique(the.data[,2]))
+b = length(unique(the.data[,3]))
+means.A = by(the.data[,1], the.data[,2], fun.name)
+means.B = by(the.data[,1],the.data[,3],fun.name)
+means.AB = by(the.data[,1],list(the.data[,2],the.data[,3]),fun.name)
+MAB = matrix(means.AB,nrow = b, ncol = a, byrow = TRUE)
+colnames(MAB) = names(means.A)
+rownames(MAB) = names(means.B)
+MA = as.numeric(means.A)
+names(MA) = names(means.A)
+MB = as.numeric(means.B)
+names(MB) = names(means.B)
+MAB = t(MAB)
+results = list(A = MA, B = MB, AB = MAB)
+return(results)
+}
+scary.CI = function(the.data,MSE,equal.weights = TRUE,multiplier,group,cs){
+if(sum(cs) != 0 & sum(cs !=0 ) != 1){
+return("Error - you did not input a valid contrast")
+}else{
+the.means = find.means(the.data)
+the.ns =find.means(the.data,length)
+nt = nrow(the.data)
+a = length(unique(the.data[,2]))
+b = length(unique(the.data[,3]))
+if(group =="A"){
+if(equal.weights == TRUE){
+a.means = rowMeans(the.means$AB)
+est = sum(a.means*cs)
+mul = rowSums(1/the.ns$AB)
+SE = sqrt(MSE/b^2 * (sum(cs^2*mul)))
+N = names(a.means)[cs!=0]
+CS = paste("(",cs[cs!=0],")",sep = "")
+fancy = paste(paste(CS,N,sep =""),collapse = "+")
+names(est) = fancy
+} else{
+a.means = the.means$A
+est = sum(a.means*cs)
+SE = sqrt(MSE*sum(cs^2*(1/the.ns$A)))
+N = names(a.means)[cs!=0]
+CS = paste("(",cs[cs!=0],")",sep = "")
+fancy = paste(paste(CS,N,sep =""),collapse = "+")
+names(est) = fancy
+}
+}else if(group == "B"){
+if(equal.weights == TRUE){
+b.means = colMeans(the.means$AB)
+est = sum(b.means*cs)
+mul = colSums(1/the.ns$AB)
+SE = sqrt(MSE/a^2 * (sum(cs^2*mul)))
+N = names(b.means)[cs!=0]
+CS = paste("(",cs[cs!=0],")",sep = "")
+fancy = paste(paste(CS,N,sep =""),collapse = "+")
+names(est) = fancy
+} else{
+b.means = the.means$B
+est = sum(b.means*cs)
+SE = sqrt(MSE*sum(cs^2*(1/the.ns$B)))
+N = names(b.means)[cs!=0]
+CS = paste("(",cs[cs!=0],")",sep = "")
+fancy = paste(paste(CS,N,sep =""),collapse = "+")
+names(est) = fancy
+}
+} else if(group == "AB"){
+est = sum(cs*the.means$AB)
+SE = sqrt(MSE*sum(cs^2/the.ns$AB))
+names(est) = "someAB"
+}
+the.CI = est + c(-1,1)*multiplier*SE
+results = c(est,the.CI)
+names(results) = c(names(est),"lower bound","upper bound")
+return(results)
+}
+}
+the.means = find.means(the.data)
+the.model = lm(Y ~ A*B, data = the.data)
+SSE = sum(the.model$residuals^2)
+MSE = SSE/(nt-a*b)
+Bon = find.mult(alpha = 0.05, a = 2, b = 3, dfSSE = 24 - 2*3, g = 1, group = "A")[1]
+A.cs.1 = c(0,1)
+A.cs.2 = c(1,-1)
+#Confidence interval for first factor level of factor A:
+Ia=scary.CI(the.data,MSE,equal.weights = TRUE,Bon,"A",A.cs.1)[2:3]
+Ie=scary.CI(the.data,MSE,equal.weights = TRUE,Bon,"A",A.cs.2)[2:3]
+Tuk = find.mult(alpha = 0.1, a = 2, b = 3, dfSSE = 24 - 2*3, g = 1, group = "B")[2]
+B.cs.1 = c(1,-1,0)
+B.cs.2 = c(1,0,-1)
+Ib1=scary.CI(the.data,MSE,equal.weights = FALSE,Tuk,"B",B.cs.1)[2:3]
+Ib2=scary.CI(the.data,MSE,equal.weights = FALSE,Tuk,"B",B.cs.2)[2:3]
+Sch = find.mult(alpha = 0.01, a = 2, b = 3, dfSSE = 24 - 2*3, g = 1, group = "AB")[3]
+AB.cs = matrix(0,nrow = a, ncol = b)
+AB.cs[1,1] = 1
+AB.cs[2,1] = -1
+Ic1=scary.CI(the.data,MSE,equal.weights = TRUE,Sch,"AB",AB.cs)[2:3]
+AB.cs = matrix(0,nrow = a, ncol = b)
+AB.cs[1,3] = 1
+AB.cs[2,3] = -1
+Ic2=scary.CI(the.data,MSE,equal.weights = TRUE,Sch,"AB",AB.cs)[2:3]
+the.model = lm(Y ~ A*B,data = the.data)
+b0=the.model$coefficients[1]
+b1=the.model$coefficients[2]
+b2=the.model$coefficients[3]
+b3=the.model$coefficients[4]
+b4=the.model$coefficients[5]
+b5=the.model$coefficients[6]
+IIa = length(the.model$coefficients)
+new.data=read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/Teaching.csv",header = TRUE)
+interaction.plot(x.factor = new.data$Method, trace.factor = new.data$Room, response = new.data$Scores, type = "l", ylab = "Scores", xlab = "Method", col = c("red4", "blue4"), lty = 1, lwd = 2, trace.label = "Location", xpd = FALSE)
+find.means = function(the.data,fun.name = mean){
+a = length(unique(the.data[,2]))
+b = length(unique(the.data[,3]))
+means.A = by(the.data[,1], the.data[,2], fun.name)
+means.B = by(the.data[,1],the.data[,3],fun.name)
+means.AB = by(the.data[,1],list(the.data[,2],the.data[,3]),fun.name)
+MAB = matrix(means.AB,nrow = b, ncol = a, byrow = TRUE)
+colnames(MAB) = names(means.A)
+rownames(MAB) = names(means.B)
+MA = as.numeric(means.A)
+names(MA) = names(means.A)
+MB = as.numeric(means.B)
+names(MB) = names(means.B)
+MAB = t(MAB)
+results = list(A = MA, B = MB, AB = MAB)
+return(results)
+}
+IIIb1=find.means(new.data,mean)$A
+IIIb2=find.means(new.data,mean)$B
+IIIb3=find.means(new.data,mean)$AB
+n = nrow(new.data)
+
+AB =lm( Scores ~ Method * Room,data = new.data)
+A.B = lm( Scores~  Method + Room, data = new.data)
+A = lm(Scores ~ Method, data = new.data)
+B = lm(Scores ~ Room, data = new.data)
+N0 = lm(Scores ~ 1, data = new.data)
+AllM = list(AB, A.B, A, B, N0)
+SSEs = round(sapply(AllM, function(i) sum(i$residual^2)),2)
+
+SSEF = SSEs[1]
+SSER = SSEs[2]
+
+a = length(unique(new.data[,2]))
+b = length(unique(new.data[,3]))
+df.F= n - a*b
+df.R = n -(a-1)-(b-1)-1
+FN = round((SSER - SSEF)/(df.R - df.F),4)
+FD = round(SSEF/df.F,4)
+Fs = round(FN/FD,4)
+
+results = anova(A.B,AB)
+t.test = results[2,5]
+p.val = results[2,6]
+
+new.model = lm(Scores ~ Method*Room, data = new.data)
+IIIb0=new.model$coefficients[1]
+IIIb1=new.model$coefficients[2]
+IIIb2=new.model$coefficients[3]
+IIIb3=new.model$coefficients[4]
+IIIb4=new.model$coefficients[5]
+IIIb5=new.model$coefficients[6]
+IIIb6=new.model$coefficients[7]
+IIIb7=new.model$coefficients[8]
+```

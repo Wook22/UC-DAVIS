@@ -1,0 +1,147 @@
+---
+title: "CHOE.JONGWOOK-MID1"
+author: "JONG-WOOK-CHOE"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+# I. Introduction
+
+The goal is to find which factors affect the birth weight. Main task is to examine appropriate plots of the data and interpret them in the context of the problem. To be clear, interpretations should specifically indicate which individuals babies stand out from the rest.
+
+# II. Summary of the data
+
+This dataset contains information on new born babies and their parents. Total of sixteen variables there are three categorical variables smoke status, low birth weight, and delivery in one's old age. The rest are babies length, weight head circumference, gestation, mother's age, how many cigarettes per day, height, pre-pregnancy weight, father's age, years in education, number of cigarettes smoked per day, and lastly height. 
+
+```{r, echo=FALSE}
+rm(list=ls())
+birth=read.csv("/Users/Bosco/Desktop/SPRING2021/STA 135/data/Birthweight_reduced_kg_R.csv")
+```
+
+Since the scale of each variable is different it is better to use correlation matrix rather than covariance matrix for the data. Using correlation matrix it is equivalent to standardizing each of the variables to same mean and variance. PCA on correlation is much more informative and reveals relationship between variables along with some structure in the data.
+
+
+```{r, echo=FALSE}
+#plots of the data to interpret the context
+n.birth=birth[,c(-1,-15,-16)]
+stars(x=n.birth,draw.segments = TRUE,key.loc = c(20,10), main="New born babies star plot", labels=c(1:42))
+```
+
+
+Recall birth weight being main dependent variable of the experiment. There are few new born babies who seems to be distinct from the rest, namely #1, #2, #3, #4, #5, #6, #28, #35. In general the babies with high birth weight tend to have non smoker mother.
+
+
+# III. Analysis
+
+```{r , echo=FALSE}
+#PCA for the data using the correlation matrix
+library(corrplot)
+cor.birth=cor(n.birth)
+cor.birth
+corrplot.mixed(cor.birth,lower = "number",upper = "color",tl.pos = "lt",tl.col = "black")
+```
+According to the plot, some variables are highly correlated as demonstrated by the high correlation between variables from correlation matrix. 
+
+```{r , echo=FALSE}
+p.birth=birth[,c(-1,-6,-15,-16)]
+pca.save=princomp(x = p.birth, cor = TRUE,scores = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.2)
+```
+
+* PC #1 is a measure of the babies length, weight, head circumference, gestation, mother's height, pre-pregnancy weight, and father's age.
+* PC #2 is a measuring difference between mother's age, number of cigarettes smoked per day, father's age, and years in education versus father's height. 
+* PC #3 is a measuring difference between babies weight versus number of cigarettes smoked per day by mother, height, pre-pregnancy weight, number of cigarettes smoked per day by father, height.
+* PC #4 is a measuring difference between mother's height, pre-pregnancy weight, and years in education versus father's age and number of cigarettes smoked per day.
+* PC #5 is a measuring difference between babies gestation, number of cigarettes smoked per day by mother, father's years in education, height versus mother's height and pre-pregnancy weight. 
+* PC #6 is a measuring difference between babies gestation and number of cigarettes smoked per day by mother versus babies head circumference, father's years in education, and height.
+* PC #7 is a measuring difference between babies gestation and mother's pre-pregnancy weight versus babies head circumference and number of cigarettes smoked per day by mother.
+* PC #8 is a measuring difference between babies length, mother's age, height, and father's height versus babies weight, mother's re-pregnancy weight, father's years in education, and number of cigarettes smoked per day.
+* PC #9 is a measuring difference between babies length, father's years in education, and number of cigarettes smoked per day versus babies head circumference, mother's pre-pregnancy weight, father's age, height.
+* PC #10 is a measuring difference between babies length and mother's pre-pregnancy weight versus babies weight, mother's age, and height.
+* PC #11 is a measuring difference between babies weight and father's height versus babies head circumference, gestation, mother's height, and number of cigarettes smoked per day by father.
+* PC #12 is a measuring difference between mother's age and pre-pregnancy weight versus mother's height and father's age.
+
+Cumulative proportion of the total sample variance explained by five PCs account for 80% of the variability in the data. Since it is over 80% therefore using correlation matrix it needs five PCs.  
+
+```{r , echo=FALSE}
+library(factoextra)
+fviz_eig(pca.save)
+```
+
+Until the bending point the proportion of each principal component in the data is high. After the bending point, the portion of the main ingredient is significantly smaller even if it is included. Therefore usually, it is decided that the data should be represented by including the principal components only to the point of bending.
+
+```{r , echo=FALSE}
+fviz_pca_biplot(pca.save,repel = TRUE,col.var = "#2E9FDF",col.ind = "#696969")
+```
+
+When two vectors are close, forming a small angle, the two variables they represent are positively correlated. Therefore weight of baby is positively correlated with babies length, gestation, head circumference, and mother's height.
+
+# IV. Interpretation
+
+The newly born babies height is 61, weight 5.1, headcirumderence 36, gestation 43, mother smoke status no, mother's age 43, number of cigarettes smoked per day 7, height 165, pre-pregnancy weight 64, father's aged 38, years in education 19, number of cigarettes smoked per day 45, and height 189.
+
+Without the previous PCA results the characteristics of a newly born child is already out standing comparing the rest. As discussed weight of baby is positively correlated with babies length, gestation, head circumference, and mother's height. The highest height and head circumference of the newly born child support that indiviual stand out from the rest.
+
+With that being said mother's smoking status strongly influence newly born babies weight. Moreover, to compare babies according with their mother's smoking status we divide into two datasets of smoking and non-smoking mother.
+
+```{r , echo=FALSE}
+index= which(birth$smoker=="1")
+sm.birth=birth[index,]
+ns.birth=birth[-index,]
+pca.sm=princomp(x = sm.birth[,c(-1,-6,-15,-16)], cor = TRUE,scores = TRUE)
+summary(pca.sm, cutoff = 0.2)
+fviz_eig(pca.sm, title="Scree plot of smoke mother")
+fviz_pca_biplot(pca.sm,repel = TRUE,col.var = "#2E9FDF",col.ind = "#696969")
+```
+To begin with the smoking mother the first five PCs account for about 85% of the total variation. Therefore total of five PCs need when using the correlation matrix. Also from the plot it shows that the birth weight has positive correlation with correlated with babies length, gestation, head circumference, and father's age. On the other hand negatively correlated with father's height and number of cigarettes smoked per day.
+
+
+```{r , echo=FALSE}
+pca.ns=princomp(x = ns.birth[,c(-1,-6,-8,-15,-16)], cor = TRUE,scores = TRUE)
+summary(pca.ns, cutoff = 0.2)
+fviz_eig(pca.ns, title="Scree plot of non-smoke mother")
+fviz_pca_biplot(pca.ns,repel = TRUE,col.var = "#2E9FDF",col.ind = "#696969")
+```
+Next with the non smoking mother dataset first five PCs also account for about 85% of the total variation. Therefore total of five PCs need when using the correlation matrix. When mother doesn't smoke birth weight has positive correlation with babies length, gestation, head circumference, and father's height. On the contrary, parent's age and father's years in education has negative correlation.
+
+# V. Conclusion
+
+To sum up, the smoking status of the mother critically affects the weight of the newly born baby. Mostly babies length, gestation, and head circumference affect the weight. That is why the characteristics of a newly born baby was out standing comparing others. Moreover, both smoking and non smoking mother showed positive correlation with babies length, gestation, and head circumference. The difference is that when mother doesn't smoke the babies weight has negative correltion with parent's age. It means that younger the parents are the babies weight tend to be high.
+
+Since using correlation matrix the scales were normalized therefore the result could be slightly different. It would be more challenging to remove outliers and refine dataset to get more accurate PCA result.
+
+## Appendix
+
+```{r,eval=FALSE}
+rm(list=ls())
+birth=read.csv("/Users/Bosco/Desktop/SPRING2021/STA 135/data/Birthweight_reduced_kg_R.csv")
+birth
+#plots of the data to interpret the context
+n.birth=birth[,c(-1,-15,-16)]
+stars(x=n.birth,draw.segments = TRUE,key.loc = c(20,10), main="New born babies star plot", labels=c(1:42))
+#PCA for the data using the correlation matrix
+library(corrplot)
+cor.birth=cor(n.birth)
+cor.birth
+pairs(formula=~Length+Birthweight+Headcirc+Gestation+smoker+mage+mnocig+mheight+mppwt+fage+fedyrs+fnocig+fheight, data = n.birth)
+corrplot.mixed(cor.birth,lower = "number",upper = "color",tl.pos = "lt",tl.col = "black")
+p.birth=birth[,c(-1,-6,-15,-16)]
+pca.save=princomp(x = p.birth, cor = TRUE,scores = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.2)
+library(factoextra)
+fviz_eig(pca.save)
+fviz_pca_biplot(pca.save,repel = TRUE,col.var = "#2E9FDF",col.ind = "#696969")
+index= which(birth$smoker=="1")
+sm.birth=birth[index,]
+ns.birth=birth[-index,]
+pca.sm=princomp(x = sm.birth[,c(-1,-6,-15,-16)], cor = TRUE,scores = TRUE)
+summary(pca.sm, cutoff = 0.2)
+fviz_eig(pca.sm, title="Scree plot of smoke mother")
+fviz_pca_biplot(pca.sm,repel = TRUE,col.var = "#2E9FDF",col.ind = "#696969")
+pca.ns=princomp(x = ns.birth[,c(-1,-6,-8,-15,-16)], cor = TRUE,scores = TRUE)
+summary(pca.ns, cutoff = 0.2)
+fviz_eig(pca.ns, title="Scree plot of non-smoke mother")
+fviz_pca_biplot(pca.ns,repel = TRUE,col.var = "#2E9FDF",col.ind = "#696969")
+```

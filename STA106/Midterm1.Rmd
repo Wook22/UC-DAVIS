@@ -1,0 +1,310 @@
+---
+title: "STA 106 Exam I Project"
+author: "JONG-WOOK-CHOE"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+I. 
+
+The experiment goal is the find the relation between different nests for sparrow on Kent Island attracted different size sparrow. The interesting fact about this experiment is that commonly people would think that the size of the nest and sparrow will show postive relationship. It means bigger nest bigger sparrow and same as other way around. It is like a size of the trunk pants, bigger waist bigger size. The data that is given has three groups, controlled not manipulated nest, manipulated to be larger nest, and lastly manipulated to be a smaller nest. From the gathered sparrows weight by group it can be described as single factor ANOVA. To find the relationship between size of the nest and sparrow first state a hypothesis comparing sample means. After that calculated the sum of squared values to test statistic and approximate p-value of the test. With the proper significant level comparing with p-value conclude whether to accept of reject the hypothesis. Addition to hypothesis testing, with the confidence interval comparing groups it could find whether there are significant difference.
+
+
+```{r, echo=FALSE}
+newdata = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/sparrow.csv")
+```
+
+II. 
+
+
+```{r, echo=FALSE}
+library(ggplot2)
+ggplot(newdata,aes(x=Weight))+geom_histogram(binwidth=1,color="black",fill="white",position="identity")+facet_grid(Treatment~.)+ggtitle("(a) Different nests for different size sparrows")
+boxplot(Weight~Treatment,data=newdata,main="(b) Different nests for different size sparrows")
+```
+First histogram and boxplots show Weight by Nest type. (a) plot shows the spread and shape of the plots appears to be roughly equal with control and enlarged group but the reduced group shows a little difference with others. Lastly to check whether there is an actual difference the box plot (b) shows that reduced group has larger trend in the data.
+
+```{r, echo=FALSE}
+group.means = by(newdata$Weight,newdata$Treatment,mean)
+group.sds = by(newdata$Weight,newdata$Treatment,sd)
+group.nis = by(newdata$Weight,newdata$Treatment,length)
+the.summary = rbind(group.means,group.sds,group.nis)
+the.summary = round(the.summary,digits = 4)
+colnames(the.summary) = names(group.means)
+rownames(the.summary) = c("Means","Std. Dev","Sample Size")
+the.summary
+```
+
+Moreover, chart shows that the reduced size group may be significantly different from the control and enlarged groups. On the other hand the control and enlarged size groups may not be significantly different.
+
+III. 
+
+```{r,echo=FALSE}
+the.model = lm(Weight ~ Treatment, data = newdata)
+newdata$ei = the.model$residuals
+
+nt = nrow(newdata) 
+a = length(unique(newdata$Treatment)) 
+SSE = sum(newdata$ei^2) 
+MSE = SSE/(nt-a) 
+eij.star = the.model$residuals/sqrt(MSE)
+
+alpha = 0.05
+t.cutoff= qt(1-alpha/(2*nt), nt-a)
+CO.eij = which(abs(eij.star) > t.cutoff)
+
+outliers = CO.eij
+new.data = newdata[-outliers,]
+new.model = lm(Weight ~ Treatment,data = new.data)
+
+```
+
+To perform diagnostics of the model first the assumptions have to be checked. The assumption that need to perform test=statistic and confidence intervals are following 
+
+* All $Y_{ij}$ were randomly sampled 
+* All groups ae independent
+* $\epsilon_{ij}$~$N(0,\sigma_{\epsilon})$ for all i,j
+
+Outliers can cause non-normality or non-constant variance. Therefore using semi-studentized residuals comparing withe percentile $t_{1-\alpha/(2*n_t)}$ outlier can be found. Once the outliers are found, new dataset without it is needed. 
+
+```{r,echo=FALSE}
+qqnorm(new.model$residuals)
+qqline(new.model$residuals)
+```
+
+Next in order to check normality a QQ plot calcuates the actual centered percentiles of the data, and compares them to ideal point if the data was normal. As the graph shows the points are close to the line therefore it is approximately normal.
+
+```{r,echo=FALSE}
+ei = new.model$residuals
+plot(new.model$fitted.values, new.model$residuals, main = "Errors vs. Group Means",xlab = "Group Means",ylab = "Errors",pch = 19)
+abline(h = 0,col = "purple")
+library(ggplot2)
+qplot(Treatment, ei, data = new.data) +  ggtitle("Errors vs. Groups") + xlab("Groups") + ylab("Errors") + geom_hline(yintercept = 0,col = "purple")
+boxplot(ei ~ Treatment, data = new.data)
+library(carData)
+library(car)
+the.BFtest = leveneTest(ei~ Treatment, data=newdata, center=median)
+p.val = the.BFtest[[3]][1]
+```
+Also generated plots show that they are roughly equal variance. 
+
+Another way to check the normality needs to state the null and alternative hypothesis of the Brown-Forsythe test.
+
+$H_0:\sigma^2_{control}=\sigma^2_{enlarged}=\sigma^2_{reduced}$ vs. $H_a:$ At least one group vairance is unequal. 
+
+Brown-Forstyhe' p-value is `r p.val`. At any reasonable value of $\alpha$, p-value is bigger than $\alpha$. Therefore test fail to reject the null it concluded the variances are approximately equal.
+
+
+IV. 
+
+Now the assumption for single factor ANOVA are satisfied it is possible to state the single factor ANOVA null and alternative hypothesis, and calculate the appropriate test-statistic.
+
+$H_0: \mu_{control} = \mu_{enlarged} = \mu_{reduced}$ vs. $H_a$ At least one population average is different
+
+```{r,echo=FALSE}
+group.means = by(new.data$Weight,new.data$Treatment,mean)
+group.sds = by(new.data$Weight,new.data$Treatment,sd)
+group.nis = by(new.data$Weight,new.data$Treatment,length)
+the.summary = rbind(group.means,group.sds,group.nis)
+the.summary = round(the.summary,digits = 4)
+colnames(the.summary) = names(group.means)
+rownames(the.summary) = c("Means","Std. Dev","Sample Size")
+anova.table = anova(lm(Weight~Treatment, data=new.data))
+SSA=anova.table[1,2]
+SSE=anova.table[2,2]
+SSTO=var(new.data$Weight)*(nrow(new.data)-1)
+MSA=anova.table[1,3]
+MSE=anova.table[2,3]
+MSTO=SSTO/(nrow(new.data)-1)
+Fs=anova.table[1,4]
+pvalue=anova.table[1,5]
+```
+
+$F_S = \frac{MSA}{MSE} = \frac{`r MSA`}{`r MSE`} = `r Fs`$.
+
+Using the F-table, find the approximate p-value to be 0.0001 $<$ p-value $<$ 0.001.
+
+With the smallest $\alpha$ used is 0.01, and the p-value is smaller than 0.01. Therefore there is sufficient statistical evidence to conclude that there is a difference in the average weight at least one of the different nest size groups.
+
+```{r,echo=FALSE}
+give.me.power = function(ybar,ni,MSE,alpha){
+  a = length(ybar) 
+  nt = sum(ni) 
+  overall.mean = sum(ni*ybar)/nt 
+  phi = (1/sqrt(MSE))*sqrt( sum(ni*(ybar - overall.mean)^2)/a) 
+  phi.star = a *phi^2 
+  Fc = qf(1-alpha,a-1,nt-a) 
+  power = 1 - pf(Fc, a-1, nt-a, phi.star)
+  return(power)
+}
+
+POW = give.me.power(group.means,group.nis,MSE,0.01)
+
+overall.mean = sum(group.means*group.nis)/sum(group.nis)
+effect.size = sqrt( sum( group.nis/sum(group.nis) *(group.means -overall.mean)^2 )/MSE)
+library(pwr)
+pwr.results= pwr.anova.test(k = 4, f = effect.size, sig.level = 0.01, power = 0.99)
+the.n = ceiling(pwr.results$n)
+```
+
+To check validity of the test power can be calculated with $\phi$.
+
+ $\phi = \frac{1}{\sigma_\epsilon} \sqrt{\frac{\sum_i n_i (\mu_i - \mu_{\boldsymbol{\cdot}})^2}{a}}$
+ 
+the estimated power with the power table it gives `r POW`
+
+Since the power is large it is more likely to reject the null, and these are the strong evidence to suggest that the null hypothesis is false. Addition to that in order to get more power of at least 0.99 with an $\alpha$ of 0.01, the sample size per group has to be `r the.n`.
+
+
+
+V. 
+
+```{r,echo=FALSE}
+ci = c(0,0,1)
+
+give.me.CI = function(ybar,ni,ci,MSE,multiplier){
+  if(sum(ci) != 0 & sum(ci !=0 ) != 1){
+    return("Error - you did not input a valid contrast")
+  } else if(length(ci) != length(ni)){
+    return("Error - not enough contrasts given")
+  }
+  else{
+    estimate = sum(ybar*ci)
+    SE = sqrt(MSE*sum(ci^2/ni))
+    CI = estimate + c(-1,1)*multiplier*SE
+    result = c(estimate,CI)
+    names(result) = c("Estimate","Lower Bound","Upper Bound")
+    return(result)
+  }
+}
+
+t.a = qt(1-0.01/2,nrow(new.data) - length(unique(new.data$Treatment)))
+CI_1 = give.me.CI(group.means,group.nis,ci,MSE,t.a)[2:3]
+ci = c(1,-1,0)
+CI_2 = give.me.CI(group.means,group.nis,ci,MSE,t.a)[2:3]
+ci = c(1,0,-1)
+CI_3 = give.me.CI(group.means,group.nis,ci,MSE,t.a)[2:3]
+```
+
+
+From the data analysis there are statistical evidence that the mean value of each group are not the same. Calculated t-statistic, `r Fs`, gives p-value, `r pvalue`, which compares to be smaller than the significant level, $\alpha$. Since the p-value is smaller than $\alpha$ reject $H_0$ and conclude that there is evidence to suggest at least one group average number weight of sparrow is different. To check the validation of the answer use the estimated power of the test, `r POW`. The estimated power is expected to be big therefore there are more likely to reject the null, and there is strong evidence to suggest that the null is false.
+
+Now to check which group has the significant difference can found from the confidence interval. 
+
+* A 99% confidence interval for the nest that tends to have the largest sparrow is `r CI_1`.
+
+* A 99% confidence interval comparing the control nest to the enlarged nest is `r CI_2`.
+
+* A 99% confidence interval comparing the control nest to the reduced nest is `r CI_3`.
+
+A confidence interval comparing the control nest to the enlarged nest contains 0 which indicate that there are no significant difference. Moreover there are chance being same. Next a confidence interval comparing the control nest to the reduced nest suggests the control group has smaller size of sparrows than the reduced group.
+
+VI. 
+
+The goal of the experiment was to see if manipulated different nest size will affect the attraction of sparrows on Kent Island by different size. Start with the diagnostics test to check single factor ANOVA assumption holds. With Shapiro-Wilks and Brown-Forsythe test model satisfies the condition. Data analysis shows that there are statistical evidence that at least one of the group average of sparrow weight is different. Validation has been checked by the power estimation. The different nests for sparrows attracted different size sparrow. Control and enlarged nest showed similarity with no significant difference. However, the reduced size nest tend to attract bigger size sparrows than other group. In short, manipulated to be a smaller nest than normal has postive relationship with size of the sparrows. On the other hand nest that made to be larger than control group had no significant effect. Big size of Sparrows on Kent Island tend like small nest size.
+
+
+VII. 
+
+## Appendix
+
+```{r,eval=FALSE}
+newdata = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/sparrow.csv")
+library(ggplot2)
+ggplot(newdata,aes(x=Weight))+geom_histogram(binwidth=1,color="black",fill="white",position="identity")+facet_grid(Treatment~.)+ggtitle("(a) Different nests for different size sparrows")
+boxplot(Weight~Treatment,data=newdata,main="(b) Different nests for different size sparrows")
+group.means = by(newdata$Weight,newdata$Treatment,mean)
+group.sds = by(newdata$Weight,newdata$Treatment,sd)
+group.nis = by(newdata$Weight,newdata$Treatment,length)
+the.summary = rbind(group.means,group.sds,group.nis)
+the.summary = round(the.summary,digits = 4)
+colnames(the.summary) = names(group.means)
+rownames(the.summary) = c("Means","Std. Dev","Sample Size")
+the.summary
+the.model = lm(Weight ~ Treatment, data = newdata)
+newdata$ei = the.model$residuals
+
+nt = nrow(newdata) 
+a = length(unique(newdata$Treatment)) 
+SSE = sum(newdata$ei^2) 
+MSE = SSE/(nt-a) 
+eij.star = the.model$residuals/sqrt(MSE)
+
+alpha = 0.05
+t.cutoff= qt(1-alpha/(2*nt), nt-a)
+CO.eij = which(abs(eij.star) > t.cutoff)
+
+outliers = CO.eij
+new.data = newdata[-outliers,]
+new.model = lm(Weight ~ Treatment,data = new.data)
+qqnorm(new.model$residuals)
+qqline(new.model$residuals)
+ei = new.model$residuals
+plot(new.model$fitted.values, new.model$residuals, main = "Errors vs. Group Means",xlab = "Group Means",ylab = "Errors",pch = 19)
+abline(h = 0,col = "purple")
+library(ggplot2)
+qplot(Treatment, ei, data = new.data) +  ggtitle("Errors vs. Groups") + xlab("Groups") + ylab("Errors") + geom_hline(yintercept = 0,col = "purple")
+boxplot(ei ~ Treatment, data = new.data)
+library(car)
+the.BFtest = leveneTest(ei~ Treatment, data=newdata, center=median)
+p.val = the.BFtest[[3]][1]
+group.means = by(new.data$Weight,new.data$Treatment,mean)
+group.sds = by(new.data$Weight,new.data$Treatment,sd)
+group.nis = by(new.data$Weight,new.data$Treatment,length)
+the.summary = rbind(group.means,group.sds,group.nis)
+the.summary = round(the.summary,digits = 4)
+colnames(the.summary) = names(group.means)
+rownames(the.summary) = c("Means","Std. Dev","Sample Size")
+anova.table = anova(lm(Weight~Treatment, data=new.data))
+SSA=anova.table[1,2]
+SSE=anova.table[2,2]
+SSTO=var(new.data$Weight)*(nrow(new.data)-1)
+MSA=anova.table[1,3]
+MSE=anova.table[2,3]
+MSTO=SSTO/(nrow(new.data)-1)
+Fs=anova.table[1,4]
+pvalue=anova.table[1,5]
+give.me.power = function(ybar,ni,MSE,alpha){
+  a = length(ybar) 
+  nt = sum(ni) 
+  overall.mean = sum(ni*ybar)/nt 
+  phi = (1/sqrt(MSE))*sqrt( sum(ni*(ybar - overall.mean)^2)/a) 
+  phi.star = a *phi^2 
+  Fc = qf(1-alpha,a-1,nt-a) 
+  power = 1 - pf(Fc, a-1, nt-a, phi.star)
+  return(power)
+}
+
+POW = give.me.power(group.means,group.nis,MSE,0.01)
+
+overall.mean = sum(group.means*group.nis)/sum(group.nis)
+effect.size = sqrt( sum( group.nis/sum(group.nis) *(group.means -overall.mean)^2 )/MSE)
+library(pwr)
+pwr.results= pwr.anova.test(k = 4, f = effect.size, sig.level = 0.01, power = 0.99)
+the.n = ceiling(pwr.results$n)
+ci = c(0,0,1)
+
+give.me.CI = function(ybar,ni,ci,MSE,multiplier){
+  if(sum(ci) != 0 & sum(ci !=0 ) != 1){
+    return("Error - you did not input a valid contrast")
+  } else if(length(ci) != length(ni)){
+    return("Error - not enough contrasts given")
+  }
+  else{
+    estimate = sum(ybar*ci)
+    SE = sqrt(MSE*sum(ci^2/ni))
+    CI = estimate + c(-1,1)*multiplier*SE
+    result = c(estimate,CI)
+    names(result) = c("Estimate","Lower Bound","Upper Bound")
+    return(result)
+  }
+}
+
+t.a = qt(1-0.01/2,nrow(new.data) - length(unique(new.data$Treatment)))
+CI_1 = give.me.CI(group.means,group.nis,ci,MSE,t.a)[2:3]
+ci = c(1,-1,0)
+CI_2 = give.me.CI(group.means,group.nis,ci,MSE,t.a)[2:3]
+ci = c(1,0,-1)
+CI_3 = give.me.CI(group.means,group.nis,ci,MSE,t.a)[2:3]
+```

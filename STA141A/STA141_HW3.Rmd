@@ -1,0 +1,120 @@
+---
+title: "CHOE.JONGWOOK-HW3"
+author: "JONG-WOOK-CHOE"
+date: "5/14/2021"
+output: html_document
+---
+
+1.
+
+```{r}
+set.seed(1)
+n <- 100
+x1 <- runif(n)
+x2 <- runif(n,10,20)
+y <- 2+2*x1+0.3*x2+rnorm(n)
+```
+
+(a) Write out the form of the linear model and find the values of the regression coefficients $\beta_0,\beta_1,\beta_2,$ and $\sigma^2$.
+    
+The linear model is $Y=2+2X_1+0.3X_2+\epsilon$ when $\epsilon$~N(0,1)
+The regression coefficients are respectively 2, 2, and 0.3. Also, random variable $\epsilon$ is normally distributed therefore the linear model also follows same distribution and conclude $\sigma^2=1$.
+
+(b) Calculate the correlation coefficent between x1 and x2 then create scatter plot using ggplot2.
+
+```{r}
+cor(x1, x2)
+```
+
+The correlation coefficient between x1 and x2 is 0.01703215. This indicates there is very small but positive correlation between variables.
+
+```{r}
+library(ggplot2)
+data<-data.frame(x1=x1,x2=x2)
+ggplot(data,aes(x=x1, y=x2))+
+geom_point()+ 
+ggtitle("Scatter Plot: x1 vs. x2")
+```
+
+Randomly scattered points from the plot explains there is small almost no correlation between the variables.
+
+(c) Fit a least squares regression. Find the coefficients values. What is the value of s and relate with $\sigma^2$. Examine the null hypothesis when $H_0:\beta_1=0$ and $H_0:\beta_2=0$
+
+```{r}
+lm.fit<-lm(y~x1+x2)
+summary(lm.fit)
+```
+
+From the summary $\hat\beta_0,\hat\beta_1,$ and $\hat\beta_2$ are respectively 1.97628, 1.93074, and 0.30144 which is very close to the true values. 
+
+Also, the value of s are 0.57973, 0.36345, and 0.03578 which is sample standard deviation. However the square of the values are different with the true value of population variance, $\sigma^2$. 
+
+Lastly the p-value is smaller than any reasonable significance level. Therefore we may reject $H_0$ for $\beta_1$ and another $H_0$ for $\beta_2$.
+
+(d) Fit a least squares regression to predict y using only x1.
+
+```{r}
+lm.fit1 <- lm(y ~ x1)
+summary(lm.fit1)
+```
+
+From the summary $\hat\beta_0$ and $\hat\beta_1$ are respectively 6.5235 and 0.30144 which is very different to the true values. 
+
+Also, the value of s are 0.2770 and 0.4758 which is different with the true value of $\sigma^2$. 
+
+Lastly the p-value is still smaller than any reasonable significance level. Therefore we may reject $H_0$ for $\beta_1$.
+
+(e) Fit a least squares regression to predict y using only x2.
+
+```{r}
+lm.fit2 <- lm(y ~ x2)
+summary(lm.fit2)
+```
+
+From the summary $\hat\beta_0$ and $\hat\beta_2$ are respectively 2.92698 and 0.30467. $\hat\beta_2$ is close to the true value but the $\hat\beta_0$ is slightly different. 
+
+Also, the value of s are 0.62330 and 0.04044 which is different with the true value of $\sigma^2$. 
+
+Lastly the p-value is still smaller than any reasonable significance level. Therefore we may reject $H_0$ for $\beta_2$.
+
+2.
+
+```{r}
+set.seed(1)
+n <- 100
+x1 <- runif(n)
+x2 <- 0.5*x1+rnorm(n,0,.01)
+y <- 2+2*x1+0.3*x2+rnorm(n)
+cor(x1, x2)
+data<-data.frame(x1=x1,x2=x2)
+ggplot(data,aes(x=x1, y=x2))+
+geom_point()+ 
+ggtitle("Scatter Plot: x1 vs. x2")
+lm.fit<-lm(y~x1+x2)
+summary(lm.fit)
+lm.fit1<-lm(y~x1)
+summary(lm.fit1)
+lm.fit2<-lm(y~x2)
+summary(lm.fit2)
+```
+
+Using the new vectors x1, x2, and y, there are more highly correlated between variables showing clear linear relationship in Q-Q plot. Also in the first model x1 and x2 are not statistically significant, but in the second and third model both variables are highly significant as its p-value is very low, so we may reject $H_0$.
+
+3.
+
+```{r}
+x1 <- c(x1, 0.1)
+x2 <- c(x2, 0.8)
+y <- c(y, 6)
+lm.fit <- lm(y ~ x1 + x2)
+lm.fit1 <- lm(y ~ x1)
+lm.fit2 <- lm(y ~ x2)
+summary(lm.fit)
+summary(lm.fit1)
+summary(lm.fit2)
+plot(hatvalues(lm.fit))
+plot(hatvalues(lm.fit1))
+plot(hatvalues(lm.fit2))
+```
+
+Upper right corner of given plots may be an outliers. Also, observations with high leverage have an unusual value for xi. Just like first and third model the leverage statistic is always between 1/n and 1, and the average leverage for all the observations is always equal to (p+1)/n. Therefore second mode that has a leverage statistic that greatly exceeds (p+1)/n explains that the corresponding point has high leverage. 
