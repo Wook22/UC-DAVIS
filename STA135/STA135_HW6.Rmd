@@ -1,0 +1,186 @@
+---
+title: "CHOE.JONGWOOK-HW6"
+author: "JONG-WOOK-CHOE"
+output: pdf_document
+---
+I.
+
+7.1)
+
+```{r, echo=FALSE}
+y=matrix(c(15,9,3,25,7,13),nrow=6,ncol=1)
+z=matrix(c(1,1,1,1,1,1,10,5,7,19,11,8),nrow=6,ncol=2)
+ztz=t(z)%*%z
+beta=solve(ztz)%*%t(z)%*%y
+yhat=z%*%beta
+e=y-yhat
+result=t(e)%*%e
+result
+```
+
+7.2)
+
+```{r, echo=FALSE}
+z1=c(10,5,7,19,11,18)
+z2=c(2,3,3,6,7,9)
+y=c(15,9,3,25,7,13)
+data=data.frame(z1,z2,y)
+sdata=data.frame(z1=(z1-mean(z1))/sd(z1),z2=(z2-mean(z2))/sd(z2),y=(y-mean(y))/sd(y))
+smodel=lm(y~z1+z2,sdata)
+summary(smodel)
+model=lm(y~z1+z2,data)
+summary(model)
+```
+
+The fitted regression equation of standardized model is following
+
+$\hat{Y}=1.33z_1-0.787z_2$
+
+The fitted regression equation of original model is following
+
+$\hat{Y}=2.15+1.78z_1-2.19z_2$
+
+
+7.8)
+
+a.
+
+Recall that the hat matrix is defined by $H=Z(Z'Z)^{-1}Z'$
+
+$H^2=(Z(Z'Z)^{-1}Z')^2=Z(Z'Z)^{-1}Z'Z(Z'Z)^{-1}Z'=Z(Z'Z)^{-1}Z'=H$
+
+Therefore H is an idempotent matrix.
+
+b.
+
+Since H is an idempotent matrix, I-H is also an idempotent and positive definite matrix. 
+
+Therefore $A'(I-H)A=(1-h_{ij})\geqslant0$ and $h_{ij}<1$
+in result $0<h_{ij}<1$. 
+
+$\sum_{j=1}^nh_{ij}=tr(Z(Z'Z)^{-1}Z')=tr((Z'Z)^{-1}Z'Z=tr(I_{r+1})=r+1$
+
+
+7.9)
+
+```{r, echo=FALSE}
+z1=c(-2,-1,0,1,2)
+y1=c(5,3,4,2,1)
+y2=c(-3,-1,-1,2,3)
+data=data.frame(z1,y1,y2)
+model1=lm(y1~z1,data)
+summary(model1)
+model2=lm(y2~z1,data)
+summary(model2)
+y=t(rbind(y1,y2))
+yhat=t(rbind(model1$fitted.values,model2$fitted.values))
+```
+
+7.10)
+
+a. (1.35,3.75)
+
+b. (-0.25,5.35)
+
+c. $\geqslant69.82$
+
+7.15)
+
+```{r, echo=FALSE}
+z1 = c(15.31, 15.2, 16.25, 14.33, 14.57, 17.33, 14.48, 14.91, 15.25, 13.89, 15.18, 14.44, 14.87, 18.63, 15.2, 25.76, 19.05, 15.37, 18.06, 16.35)
+z2 = c(57.3, 63.8, 65.4, 57, 63.8, 63.2, 60.2, 57.7, 56.4, 55.6, 62.6, 63.4, 60.2, 67.2, 57.1, 89.6, 68.6, 60.1, 66.3, 65.8)
+y = c(74.8, 74, 72.9, 70, 74.9, 76, 72, 73.5, 74.5, 73.5, 71.5, 71, 78.9, 86.5, 68, 102, 84, 69, 88, 76)
+data=data.frame(z1,z2,y)
+model=lm(y~z1+z2,data)
+summary(model)
+```
+
+a. $Y=31.00+2.63z_1+0.04z_2$
+
+b.
+
+```{r, echo=FALSE}
+par(mfrow=c(2,2))
+plot(model)
+```
+
+c.
+
+```{r, echo=FALSE}
+newdata=data.frame(z1=17,z2=46,y=0)
+predict(model,newdata, interval="prediction")
+```
+
+d. There are no specific pattern observed therefore no inadequacy of the fitted linear regression model is observed.
+
+II.
+
+```{r, echo=FALSE}
+cereal=read.csv("/Users/Bosco/Desktop/SPRING2021/STA 135/data/cereal.csv")
+cerealdata=cereal[,5:7]
+colnames(cerealdata)=c("sugar","fat","sodium")
+p<-3
+n<-40
+mu.hat<-colMeans(cerealdata)
+sigma.hat<-var(cerealdata)
+q95level<-qf(0.95,2,n-2)
+Lowermu1<-mu.hat[1]-sqrt(2*(n-1)*q95level/(n-2))*sqrt(sigma.hat[1,1]/n)
+Uppermu1<-mu.hat[1]+sqrt(2*(n-1)*q95level/(n-2))*sqrt(sigma.hat[1,1]/n)
+Lowermu2<-mu.hat[2]-sqrt(2*(n-1)*q95level/(n-2))*sqrt(sigma.hat[2,2]/n)
+Uppermu2<-mu.hat[2]+sqrt(2*(n-1)*q95level/(n-2))*sqrt(sigma.hat[2,2]/n)
+CI4mu1<-c(Lowermu1,Uppermu1)
+CI4mu1
+```
+
+## Appendix
+
+```{r,eval=FALSE}
+y=matrix(c(15,9,3,25,7,13),nrow=6,ncol=1)
+z=matrix(c(1,1,1,1,1,1,10,5,7,19,11,8),nrow=6,ncol=2)
+ztz=t(z)%*%z
+beta=solve(ztz)%*%t(z)%*%y
+yhat=z%*%beta
+e=y-yhat
+result=t(e)%*%e
+result                                                                            z1=c(10,5,7,19,11,18)
+z2=c(2,3,3,6,7,9)
+y=c(15,9,3,25,7,13)
+data=data.frame(z1,z2,y)
+sdata=data.frame(z1=(z1-mean(z1))/sd(z1),z2=(z2-mean(z2))/sd(z2),y=(y-mean(y))/sd(y))
+smodel=lm(y~z1+z2,sdata)
+summary(smodel)
+model=lm(y~z1+z2,data)
+summary(model)                                                     z1=c(-2,-1,0,1,2)
+y1=c(5,3,4,2,1)
+y2=c(-3,-1,-1,2,3)
+data=data.frame(z1,y1,y2)
+model1=lm(y1~z1,data)
+summary(model1)
+model2=lm(y2~z1,data)
+summary(model2)
+y=t(rbind(y1,y2))
+yhat=t(rbind(model1$fitted.values,model2$fitted.values))                                                         z1 = c(15.31, 15.2, 16.25, 14.33, 14.57, 17.33, 14.48, 14.91, 15.25, 13.89, 15.18, 14.44, 14.87, 18.63, 15.2, 25.76, 19.05, 15.37, 18.06, 16.35)
+z2 = c(57.3, 63.8, 65.4, 57, 63.8, 63.2, 60.2, 57.7, 56.4, 55.6, 62.6, 63.4, 60.2, 67.2, 57.1, 89.6, 68.6, 60.1, 66.3, 65.8)
+y = c(74.8, 74, 72.9, 70, 74.9, 76, 72, 73.5, 74.5, 73.5, 71.5, 71, 78.9, 86.5, 68, 102, 84, 69, 88, 76)
+data=data.frame(z1,z2,y)
+model=lm(y~z1+z2,data)
+summary(model)
+par(mfrow=c(2,2))
+plot(model)
+newdata=data.frame(z1=17,z2=46,y=0)
+predict(model,newdata, interval="prediction")
+cereal=read.csv("/Users/Bosco/Desktop/SPRING2021/STA 135/data/cereal.csv")
+cerealdata=cereal[,5:7]
+colnames(cerealdata)=c("sugar","fat","sodium")
+p<-3
+n<-40
+mu.hat<-colMeans(cerealdata)
+sigma.hat<-var(cerealdata)
+q95level<-qf(0.95,2,n-2)
+Lowermu1<-mu.hat[1]-sqrt(2*(n-1)*q95level/(n-2))*sqrt(sigma.hat[1,1]/n)
+Uppermu1<-mu.hat[1]+sqrt(2*(n-1)*q95level/(n-2))*sqrt(sigma.hat[1,1]/n)
+Lowermu2<-mu.hat[2]-sqrt(2*(n-1)*q95level/(n-2))*sqrt(sigma.hat[2,2]/n)
+Uppermu2<-mu.hat[2]+sqrt(2*(n-1)*q95level/(n-2))*sqrt(sigma.hat[2,2]/n)
+CI4mu1<-c(Lowermu1,Uppermu1)
+CI4mu1
+```

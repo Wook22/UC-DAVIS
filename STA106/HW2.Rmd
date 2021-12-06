@@ -1,0 +1,254 @@
+---
+title: "CHOE.JONGWOOK-HW2"
+author: "JONG-WOOK-CHOE"
+output:
+  pdf_document: default
+  html_document: default
+---
+BOOK HOMEWORK
+
+1. (a) $\hat\mu_1=38,\hat\mu_2=32,\hat\mu_3=24$
+
+   (b) $E[\hat{Y_{11}}]=E[\hat{Y_{12}}]=...=E[\hat{Y_{18}}]=\hat\mu_1=38$
+       $E[\hat{Y_{21}}]=E[\hat{Y_{22}}]=...=E[\hat{Y_{2,10}}]=\hat\mu_2=32$
+       $E[\hat{Y_{31}}]=E[\hat{Y_{32}}]=...=E[\hat{Y_{16}}]=\hat\mu_3=24$
+       
+   (c) $SSTO=6.88^2(24-1)=1088.69$
+       $SSA=8(38-32)^2+10(32-32)^2+6(24-32)^2=672$
+       $SSE=SSTO-SSA=416.69$
+       
+   (d) $d.f.(SSTO)=24-1=23$
+       $d.f.(SSA)=3-1=2$
+       $d.f.(SSE)=23-2=21$
+       
+   (e) $MSTO=\frac{SSTO}{df(SSTO)}=\frac{1088.69}{23}=47.33434783$
+       $MSE=\frac{SSE}{df(SSE)}=\frac{416.69}{21}=19.84238095$
+       $MSA=\frac{SSA}{df(SSA)}=\frac{672}{2}=336$
+
+2. (a) The variance for each group is constant. Based on the sample values, variance for each subgroup is it's standard deviation squared. Therefore it shows that the variance is constant.
+
+   (b) Group that fitness levels measured as above average have the fastest recovery time. To estimate which group is statistically faster than the group that has the slowest recovery time it needs to compare z-score.
+   
+   (c) $H_0:\mu_1=\mu_2=\mu_3$
+       $H_a:$ at least one $\mu_i$ is different
+       
+   (d) f-test = $\frac{MSA}{MSE}$
+              = $\frac{336}{19.84238095}$
+              = $16.93345173$
+       p-value = $2P(T>16.93345173)=0.000042<0.0001$
+       
+   (e) Since p-value < 0.01, the null hypothesis $H_0$ is rejected. This study shows the mean days for recovery is different for at least one of the fitness levels.
+
+3. (a) $\mu_1-\mu=27.75-23.56=4.19, \mu_2-\mu=21.42-23.56=-2.14, \mu_3-\mu=21.50-23.56=-2.06$
+
+   (b) Values in (a) represent the deviation of sample mean from overall mean. It describes how far sample mean goes from the overall mean in other word errors.
+   
+   (c) $SSTO=3.38^2(36-1)=399.854$
+       $SSA=12(27.75-23.56)^2+12(21.42-23.56)^2+12(21.50-23.56)^2=316.5516$
+       $SSE=SSTO-SSA=83.3024$
+       
+   (d) $d.f.(SSTO)=36-1=35$
+       $d.f.(SSA)=3-1=2$
+       $d.f.(SSE)=35-2=33$
+       
+   (e) $MSTO=\frac{SSTO}{df(SSTO)}=\frac{399.854}{35}=11.4244$
+       $MSE=\frac{SSE}{df(SSE)}=\frac{23.3024}{33}=0.70613$
+       $MSA=\frac{SSA}{df(SSA)}=\frac{316.5516}{2}=158.2758$
+
+4. (a) Middle age group is little off from the average but most of all groups shows no significant difference between each other because the variacne is samll. 
+
+   (b) The distribution of the "Young" group is 2.9929. 
+   
+   (c) $H_0:\mu_1=\mu_2=\mu_3$
+       $H_a:$ at least one $\mu_i$ is different
+       test-statistic 
+       f-test = $\frac{MSA}{MSE}$
+              = $\frac{158.2758}{0.70613}$
+              = $224.1454123$
+                
+   (d) p-value = $2P(T>224.1454123)<0.0001$
+   
+   (e) Since p-value < 0.01, the null hypothesis $H_0$ is rejected. This study shows the population averages are not equal.
+   
+   (f) Middle age group has the biggest z-score which indicate that it dffer most from each other. 
+
+5. (a) $e_{ij}=Y_{ij}-\hat\mu_{ij}=Y_{ij}-\hat Y_{ij}$
+       Therefore
+       $\sum_{j=1}^{n_i}e_{ij}=\sum_{j=1}^{n_i}(Y_{ij}-\bar Y_i)=\sum_{j=1}^{n_i}(Y_{ij})-\sum_{j=1}^{n_i}(\bar Y_i)=n_i\bar Y_i-n_i\bar Y_i=0$
+       As a result, $\sum_je_{ij}=0$ for any i.
+       
+   (b) $\sum_je_{ij}=0$
+       Therefore
+       $\sum_i\sum_je_{ij}=\sum_i(\sum_je_{ij}=0)=0$
+       
+   (c) $\sum_i\sum_j(\bar Y_i.-\bar Y..)(e_{ij})=\sum_i\sum_j(\bar Y_i.-\bar Y..)(Y_{ij}-\bar Y_i)=\sum_i(\bar Y_i.-\bar Y..)\sum_j(Y_{ij}-\bar Y_i)$
+       because there are no j component.
+       Since, $\sum_j(Y_{ij}-\bar Y_i)=sum_je_{ij}=0$
+       As a result, $\sum_i\sum_j(\bar Y_i.-\bar Y..)(e_{ij})=0$
+       
+   (d) $E[\bar Y..]=E[\frac{1}{n_i}\sum_i\sum_jY_{ij}]=\frac{1}{n_i}\sum_i\sum_jE[Y_{ij}]=\frac{1}{n_i}\sum_jn_iE[Y_{ij}]=\frac{1}{n_i}\sum_jn_i\mu_i=\mu.$
+       As a result, $E[\bar Y..]=\mu.,where\ \mu.=\sum_i\frac{n_i\mu_i}{n_T}$
+       
+   (e) Since $Var(\epsilon_{ij})=\sigma^2_{\epsilon}$,
+       $\sigma^2_{\epsilon}=Var(Y_{ij}-\mu_i)=Var(Y_{ij})+0$
+       because $\mu_i$ is constant
+       Therefore $Var(Y_{ij})=\sigma^2_{\epsilon}$
+       As a result, $\sigma^2(Y_{ij})=\sigma^2_{\epsilon}$
+
+6. (a) The statement is TRUE, SSTO is sum of squares total. It is always positive therefore, the larger $n_T$, there are additional values added which leads to larger SSTO.
+
+   (b) The statement is FALSE, there are chance that at least one mean is different.
+   
+   (c) The statement is TRUE, larger the value of $\alpha$, larger the chance of making type I error.
+   
+   (d) The statement is TRUE, If the model perfectly fit then there are no error, therefore SSE, the sum of squared estimate of errors, is equal to 0. 
+
+R HOMEWORK
+
+I
+
+```{r, echo=FALSE}
+newdata = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/Cancer.csv")
+boxplot(Survival~Organ, data=newdata, main="Survival by Organ type",horizontal = FALSE)
+print("(a) There is a signigicant differences in the group Breast. Box plot shows that most of the organ types have similar mean of survival time but the Breast organ type has big difference with other")
+
+group.means = by(newdata$Survival,newdata$Organ,mean)
+group.sds = by(newdata$Survival,newdata$Organ,sd)
+group.nis = by(newdata$Survival,newdata$Organ,length)
+the.summary = rbind(group.means,group.sds,group.nis)
+the.summary = round(the.summary,digits = 4)
+colnames(the.summary) = names(group.means)
+rownames(the.summary) = c("Means","Std. Dev","Sample Size")
+the.summary
+
+print("(b) The sample averages of Survival by Organ type is 1395.909 for Breast, 211.5882 for Bronchus, 457.4118 for Colon, 884.333 for Ovary, and 286.0000 for Stomach. All sample averages are different therefore it leads to the reject of null hypothesis. However to make statistical analogy, it needs more proof to minimize the error")
+print("(c) The standard deviation of each population is not equal because the populations are independent to each other")
+print("(d) If the alpha is larger than the p-value the true average survival time is equal. It is type II error.")
+```
+
+II
+
+```{r, echo=FALSE}
+the.table = anova(lm(Survival~Organ, data=newdata))
+the.table
+SSA=the.table[1,2]
+SSE=the.table[2,2]
+SSTO=var(newdata$Survival)*(nrow(newdata)-1)
+cat("(a) SSTO=",SSTO,"SSA=",SSA,"SSE=",SSE,"\n")
+MSA=the.table[1,3]
+MSE=the.table[2,3]
+MSTO=SSTO/63
+cat("(b) MSTO=",MSTO,"MSA=",MSA,"MSE=",MSE,"\n")
+t.test=the.table[1,4]
+pvalue=the.table[1,5]
+cat("(c) test-statistic: f-vaule=",t.test,"and the p-value=",pvalue,"\n")
+cat("(d) Since the p-value < 0.05, the null hyphothesis that the true average survival time is equal to another is rejected. There are at least one different sample mean average in the study.")
+```
+
+III
+
+```{r, echo=FALSE}
+newwdata = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/Hawk.csv")
+group.means = by(newwdata$Wing,newwdata$Species,mean)
+group.sds = by(newwdata$Wing,newwdata$Species,sd)
+group.nis = by(newwdata$Wing,newwdata$Species,length)
+the.ssummary = rbind(group.means,group.sds,group.nis)
+the.ssummary = round(the.ssummary,digits = 4)
+colnames(the.ssummary) = names(group.means)
+rownames(the.ssummary) = c("Means","Std. Dev","Sample Size")
+the.ssummary
+print("(a) The standard deviation of Cooper's is 32.1327, Red-tailed is 31.4871, and Sharp-Shinned is 22.4219")
+library(ggplot2)
+ggplot(newwdata, aes(x=Wing, fill=Species)) + geom_histogram(binwidth=2, alpha=.5, position="identity") + ggtitle("(b) Wing feather length by group")
+print("(c) The assumption of equal variance by group is false. The variance can be explained with square of the standard deviation. Since the standard deviation are different by group the assumption is false.")
+print("(d) Based on histogram it shows Red-tailed has the largest wing feather length")
+print("(e) The smallest variance of the group is Sharp-Shinned. It has the smallest standard deviation which tells it is has the smallest variance.")
+```
+
+IV
+
+```{r, echo=FALSE}
+the.ttable = anova(lm(Wing~Species, data=newwdata))
+the.ttable
+SSA=the.ttable[1,2]
+SSE=the.ttable[2,2]
+SSTO=var(newwdata$Wing)*(nrow(newwdata)-1)
+cat("(a) SSTO=",SSTO,"SSA=",SSA,"SSE=",SSE,"\n")
+MSA=the.ttable[1,3]
+MSE=the.ttable[2,3]
+MSTO=SSTO/63
+cat("(b) MSTO=",MSTO,"MSA=",MSA,"MSE=",MSE,"\n")
+t.test=the.ttable[1,4]
+pvalue=the.ttable[1,5]
+cat("(c) test-statistic: f-vaule=",t.test,"and the p-value < 2.2e-16","\n")
+cat("(d) Since the p-value < 0.05, the null hyphothesis that the true average survival time is equal to another is rejected. There are at least one different sample mean average in the study.","\n")
+cat("(e) As p-value get small there are more chance to reject null hypothesis. Therefore small p-value < 2.2e-16 indicates that no matter what alpha gets the study rejects the null hypothesis.")
+```
+
+## Appendix
+
+```{r,eval=FALSE}
+newdata = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/Cancer.csv")
+boxplot(Survival~Organ, data=newdata, main="Survival by Organ type",horizontal = FALSE)
+print("(a) There is a signigicant differences in the group Breast. Box plot shows that most of the organ types have similar mean of survival time but the Breast organ type has big difference with other")
+
+group.means = by(newdata$Survival,newdata$Organ,mean)
+group.sds = by(newdata$Survival,newdata$Organ,sd)
+group.nis = by(newdata$Survival,newdata$Organ,length)
+the.summary = rbind(group.means,group.sds,group.nis)
+the.summary = round(the.summary,digits = 4)
+colnames(the.summary) = names(group.means)
+rownames(the.summary) = c("Means","Std. Dev","Sample Size")
+the.summary
+
+print("(b) The sample averages of Survival by Organ type is 1395.909 for Breast, 211.5882 for Bronchus, 457.4118 for Colon, 884.333 for Ovary, and 286.0000 for Stomach. All sample averages are different could lead to the reject the null hypothesis. However to make statistical analogy, it needs more proof to minimize the error")
+print("(c) The standard deviation of each population is not equal because the populations are independent to each other")
+print("(d) If the alpha is larger than the p-value the true average survival time is equal. It is type II error.")
+
+the.table = anova(lm(Survival~Organ, data=newdata))
+the.table
+SSA=the.table[1,2]
+SSE=the.table[2,2]
+SSTO=var(newdata$Survival)*(nrow(newdata)-1)
+cat("(a) SSTO=",SSTO,"SSA=",SSA,"SSE=",SSE,"\n")
+MSA=the.table[1,3]
+MSE=the.table[2,3]
+MSTO=SSTO/63
+cat("(b) MSTO=",MSTO,"MSA=",MSA,"MSE=",MSE,"\n")
+t.test=the.table[1,4]
+pvalue=the.table[1,5]
+cat("(c) test-statistic: f-vaule=",t.test,"and the p-value=",pvalue,"\n")
+cat("(d) Since the p-value < 0.05, the null hyphothesis that the true average survival time is equal to another is rejected. There are at least one different sample mean average in the study.")
+
+newwdata = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/Hawk.csv")
+group.means = by(newwdata$Wing,newwdata$Species,mean)
+group.sds = by(newwdata$Wing,newwdata$Species,sd)
+group.nis = by(newwdata$Wing,newwdata$Species,length)
+the.ssummary = rbind(group.means,group.sds,group.nis)
+the.ssummary = round(the.ssummary,digits = 4)
+colnames(the.ssummary) = names(group.means)
+rownames(the.ssummary) = c("Means","Std. Dev","Sample Size")
+the.ssummary
+print("(a) The standard deviation of Cooper's is 32.1327, Red-tailed is 31.4871, and Sharp-Shinned is 22.4219")
+library(ggplot2)
+ggplot(newwdata, aes(x=Wing, fill=Species)) + geom_histogram(binwidth=2, alpha=.5, position="identity") + ggtitle("(b) Wing feather length by group")
+print("(c) The assumption of equal variance by group is false. The variance can be explained with square of the standard deviation. Since the standard deviation are different by group the assumption is false.")
+print("(d) Based on histogram it shows Red-tailed has the largest wing feather length")
+print("(e) The smallest variance of the group is Sharp-Shinned. It has the smallest standard deviation which tells it is has the smallest variance.")
+
+the.ttable = anova(lm(Wing~Species, data=newwdata))
+the.ttable
+SSA=the.ttable[1,2]
+SSE=the.ttable[2,2]
+SSTO=var(newwdata$Wing)*(nrow(newwdata)-1)
+cat("(a) SSTO=",SSTO,"SSA=",SSA,"SSE=",SSE,"\n")
+MSA=the.ttable[1,3]
+MSE=the.ttable[2,3]
+MSTO=SSTO/63
+cat("(b) MSTO=",MSTO,"MSA=",MSA,"MSE=",MSE,"\n")
+t.test=the.ttable[1,4]
+pvalue=the.ttable[1,5]
+cat("(c) test-statistic: f-vaule=",t.test,"and the p-value < 2.2e-16","\n")
+cat("(d) Since the p-value < 0.05, the null hyphothesis that the true average survival time is equal to another is rejected. There are at least one different sample mean average in the study.","\n")
+cat("(e) As p-value get small there are more chance to reject null hypothesis. Therefore small p-value < 2.2e-16 indicates that no matter what alpha gets the study rejects the null hypothesis.")
+```

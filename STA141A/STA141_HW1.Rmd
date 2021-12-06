@@ -1,0 +1,116 @@
+---
+title: "CHOE.JONGWOOK-HW1"
+author: "JONG-WOOK-CHOE"
+date: "4/15/2021"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+## 1 Vectors and simulation
+
+Suppose that we have:
+
+* four four types of animals: cat, dog, cow, squirrel;
+* four possible colors: white, black, brown, red;
+* five possible attributes: big, small, angry, cute, finicky.
+
+```{r}
+rm(list=ls())
+#(a) Generate random samples with replacement of size 100
+Animal=sample(c("cat","dog","cow","squirrel"), 100, replace = TRUE)
+Color=sample(c("white","black","brown","red"), 100, replace = TRUE)
+Attribute=sample(c("big","small","angry","cute","finicky"), 100, replace = TRUE)
+Animal
+Color
+Attribute
+#(b) Count how many animals in the sample cats/dogs
+sum(Animal == "cat")
+sum(Animal == "dog")
+#(c) Create a contingency table between Animal and Attribute
+table_le=cbind(Animal,Attribute)
+table_le
+#(d) Combine the results to produce phrases
+cbind(Animal,Color,Attribute)
+```
+
+## 2 Matrices
+Consider the following system of linear equations
+
+\begin{align*}
+x_1+2x_2+3x_3+4x_4+5x_5=7,\\
+2x_1+x_2+2x_3+3x_4+4x_5=-1,\\
+3x_1+2x_2+x_3+2x_4+3x_5=-3,\\
+4x_1+3x_2+2x_3+x_4+2x_5=5,\\
+5x_1+4x_2+3x_3+2x_4+x_5=17.
+\end{align*}
+
+```{r}
+rm(list=ls())
+#(a) Create the matrix A and the vector y corresponding to the matrix equation Ax=y
+A=rbind(c(1:5),c(2,1,2,3,4),c(3,2,1,2,3),c(4,3,2,1,2),c(5:1))
+y=cbind(c(7,-1,-3,5,17))
+#(b) Determine if the matrix A is invertible
+det(A) != 0
+#(c) Find the solution of the system of linear equations
+x=solve(A)%*%y
+#(d) Verify the solution is correct
+round(A%*%x) == round(y)
+```
+
+## 3 Functions
+
+```{r,warning=FALSE}
+rm(list=ls())
+#(a) Function that return a list of three elements
+descr_stats=function(x){
+  nA=colSums(is.na(x))
+  meanVar=cbind(apply(x, c(2), mean,na.rm = TRUE),apply(x, c(2), var,na.rm = TRUE))
+  freq=names(table(x)[which.max(x)])
+  results = list("number of NA" = nA, "mean and variance" = meanVar,"most frequent value"= freq)
+  return(results)
+}
+#(b) Three data frames
+A=matrix(c(NA,1,2,NA,3,NA),ncol= 2,nrow =3)
+B=matrix(c(NA,"a","b","c",NA),ncol= 2,nrow =3)
+C=matrix(c("a","b","c",1,2,3),ncol= 2,nrow =3)
+#(c) Testing function
+descr_stats(A)
+descr_stats(B)
+descr_stats(C)
+```
+
+## 4 Data exploration
+
+```{r}
+load(file="/Users/Bosco/Desktop/SPRING2021/STA 141A/data/countypop.RData")
+library(usmap)
+#(a) How many unique 2-letter state
+length(unique(countypop$abbr))
+#(b) What is the total number of counties in the US
+length(unique(countypop$county))
+#(c) How many unique county names are there
+length(unique(countypop$county))
+#(d) What are the top 10 most common county names
+names(sort(table(countypop$county),decreasing = TRUE))[1:10]
+#(e) Which state has the largest/smallest number of counties? 
+max(countypop$county)
+min(countypop$county)
+#(f) What is the average population of a county in the US
+tapply(countypop$pop_2015,countypop$county,mean)
+#(g) Which state has the largest county in terms of population? How many are there?
+maxpop=max(countypop$pop_2015)
+countypop$abbr[which(countypop$pop_2015==maxpop)]
+#(h) What is the largest county in terms of population of each of the states
+countypop$county[which(countypop$pop_2015==maxpop)]
+#(i) What is the average population of the 100 largest counties in the US
+larpop=names(sort(tapply(countypop$pop_2015,countypop$county,sum),decreasing = TRUE))[100]
+mean(countypop$pop_2015[which(countypop$county==larpop)])
+#(j) How many people live in each of the states
+tapply(countypop$pop_2015,countypop$abbr,sum)
+#(k) What is the average population of a county in California
+CA=countypop$pop_2015[which(countypop$abbr=="CA")]
+mean(CA)
+#(l) What is the average population of a county in each of the states
+sapply(split(countypop$pop_2015,countypop$abbr),mean)
+```

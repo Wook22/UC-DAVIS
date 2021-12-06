@@ -1,0 +1,466 @@
+---
+title: "CHOE.JONGWOOK-HW5"
+author: "JONG-WOOK-CHOE"
+output: pdf_document
+---
+BOOK HOMEWORK
+
+1. (a) $R^2${AB|(A+B)}=$\frac{SSE(A+B)-SSE(AB)}{SSE(A+B)}$=$\frac{680.31-676.80}{680.31}$=0.0051594126
+
+   (b) When add interaction effects to a model with A and B effects. The reduction in error is                    approximately 0.51%. Therefore there are not playing important role.
+   
+   (c) When Full model is $Y_{ijk}=\mu_{..}+\gamma_i+\delta_j+(\gamma\delta)_{ij}+\epsilon_{ijk}$
+   
+       where $\sum_i\gamma_i=0,\sum_j\delta_j=0,\sum_i(\gamma\delta)_{ij}=0,\sum_j(\gamma\delta)_{ij}=0$ 
+       
+       When Reduced model is $Y_{ijk}=\mu_{..}+\gamma_i+\delta_j+\epsilon_{ijk}$
+       
+       where $\sum_i\gamma_i=0,\sum_j\delta_j=0$
+       
+       $H_0:$ All $(\gamma\delta)_{ij}=0$
+       
+       $H_A:$ At least one $(\gamma\delta)_{ij}\not=0$
+       
+       $n_T=430$, $a=2$, $b=2$
+       
+       $SSE_F=676.80$, df{$SSE_F$}=$n_T-ab=430-4=426$
+       
+       $SSE_R=680.31$, df{$SSE_R$}=$n_T-(a-1)-(b-1)-1=430-1-1-1=427$
+       
+       $F_s=\frac{[\frac{SSE_R-SSE_F}{dfSSE_R-dfSSE_F}]}{\frac{SSE_F}{dfSSE_F}}=\frac{\frac{680.31-676.80}{427-426}}{\frac{676.80}{426}}$=2.209308511
+       
+       at df{num}=1, df{denom}=426
+       
+       From the F-table,  0.1 < p-value < 0.2 .With $\alpha$ respect to 0.10, p-value > $\alpha$.
+       Therefore accept $H_0$ and conclude that the model has no interaction effect between factors
+   
+   (d) Since the p=value is bigger than the significant level, the model with no interaction effect is a         statistically better fit than the model with interaction effects between who smoke cigarettes and         those who smoke marijuana.
+       
+2. (a) $\bar{Y}_{12.}$ is a sample mean for treatment level low of Dose A and medium of Dose B.
+
+   (b) $\bar{Y}_{1..}$ is a sample mean of all subject in low of Dose B.
+   
+   (c) $R^2${A|.}=$\frac{374.73-154.71}{374.73}$=0.5871427428
+   
+   (d) $R^2${B|.}=$\frac{374.73-251.07}{374.73}$=0.3299975983
+   
+   (e) Since $R^2${A|.} is larger than $R^2${B|.}, it typically suggests interaction effects of factor A         is more important.
+       
+3. (a) When Full model is $Y_{ijk}=\mu_{..}+\gamma_i+\delta_j+(\gamma\delta)_{ij}+\epsilon_{ijk}$
+
+       where $\sum_i\gamma_i=0,\sum_j\delta_j=0,\sum_i(\gamma\delta)_{ij}=0,\sum_j(\gamma\delta)_{ij}=0$
+       
+       When Reduced model is $Y_{ijk}=\mu_{..}+\gamma_i+\delta_j+\epsilon_{ijk}$
+       
+       where $\sum_i\gamma_i=0,\sum_j\delta_j=0$
+       
+       $H_0:$ All $(\gamma\delta)_{ij}=0$
+       
+       $H_A:$ At least one $(\gamma\delta)_{ij}\not=0$
+       
+       $n_T=36$, $a=3$, $b=3$
+       
+       $SSE_F=1.63$, df{$SSE_F$}=$n_T-ab=36-9=27$
+       
+       $SSE_R=31.05$, df{$SSE_R$}=$n_T-(a-1)-(b-1)-1=36-2-2-1=31$
+       
+       $F_s=\frac{[\frac{SSE_R-SSE_F}{dfSSE_R-dfSSE_F}]}{\frac{SSE_F}{dfSSE_F}}=\frac{\frac{31.05-1.63}{31-27}}{\frac{1.63}{27}}$=121.8312883
+       
+        at df{num}=4, df{denom}=27
+        
+        From the F-table,  p-value < 0.0001.
+        
+   (b) With any reasonable $\alpha$, p-value < $\alpha$. Therefore using $\alpha$=0.05
+       Reject $H_0$ and conclude that the model has interaction effect between factors.
+
+   (c) Type I error of the problem is when conclude there are no interaction effect between different dose        of each ingredient while there are actually interaction effect.
+   
+   (d) Testing for individual effects of factor A and B it is possilbe to check which ingredient has more        significant effect.
+       
+4. (a) Estimated mean difference of lung capacity between female who smoke and who don't.
+
+   (b) Estimated mean difference of lung capacity between sex who don't smoke.
+   
+   (c) Smallest probability of a Type I error $\alpha=0.01$. The p-value given is 0.01447. 
+       Since p-value > $\alpha$, accept $H_0$ and conclude that the model has no interaction effect              between factors
+   
+   (d) $R^2${AB|(A+B)}=$\frac{SSE(A+B)-SSE(AB)}{SSE(A+B)}$=$\frac{708.34-682.43}{708.34}$=0.03657848
+       Therefore there are no interaction effect between factors.
+      
+5. (a) When Full model is $Y_{ijk}=\mu_{..}+\gamma_i+\delta_j+\epsilon_{ijk}$
+
+       where $\sum_i\gamma_i=0,\sum_j\delta_j=0$
+       
+       When Reduced model is $Y_{ijk}=\mu_{..}+\delta_j+\epsilon_{ijk}$
+       
+       where $\sum_j\delta_j=0$
+       
+       $H_0:$ $\gamma_i=0$ for all i
+       
+       $H_A:$ At least one $\gamma_i\not=0$
+       
+       $n_T=165$, $a=2$, $b=2$
+       
+       $SSE_F=708.34$, df{$SSE_F$}=$n_T-a-b+1=165-4+1=162$
+       
+       $SSE_R=778.70$, df{$SSE_R$}=$n_T-b=165-2=163$
+       
+       $F_s=\frac{[\frac{SSE_R-SSE_F}{dfSSE_R-dfSSE_F}]}{\frac{SSE_F}{dfSSE_F}}$=16.091599443
+       
+       at df{num}=1, df{denom}=162
+       
+       From the F-table,  p-value < 0.0001. With any reasonable value of $\alpha$. p-value < $\alpha$.
+       Therefore reject $H_0$ and conclude Factor A effects exist
+
+   (b) When Full model is $Y_{ijk}=\mu_{..}+\gamma_i+\delta_j+\epsilon_{ijk}$
+   
+       where $\sum_i\gamma_i=0,\sum_j\delta_j=0$
+       
+       When Reduced model is $Y_{ijk}=\mu_{..}+\gamma_i+\epsilon_{ijk}$
+       
+       where $\sum_i\gamma_i=0$
+       
+       $H_0:$ $\delta_j=0$ for all j
+       
+       $H_A:$ At least one $\delta_j\not=0$
+       
+       $n_T=165$, $a=2$, $b=2$
+       
+       $SSE_F=708.34$, df{$SSE_F$}=$n_T-a-b+1=165-4+1=162$
+       
+       $SSE_R=895.26$, df{$SSE_R$}=$n_T-b=165-2=163$
+       
+       $F_s=\frac{[\frac{SSE_R-SSE_F}{dfSSE_R-dfSSE_F}]}{\frac{SSE_F}{dfSSE_F}}$=42.74930118
+       
+       at df{num}=1, df{denom}=162
+       
+       From the F-table,  p-value < 0.0001. With any reasonable value of $\alpha$. p-value < $\alpha$.
+       Therefore reject $H_0$ and conclude Factor A effects exist
+   
+   (c) $R^2${A+B|B}=$\frac{SSE(B)-SSE(A+B)}{SSE(B)}$=0.0903557211
+       $R^2${A+B|A}=$\frac{SSE(A)-SSE(A+B)}{SSE(A)}$=0.2087885084
+       
+   (d) There are no interaction between factors. Also proportion of reduction in error when adding Factor        B effects to a model with factor A effect is bigger than adding Factor A effects to a model with          factor B effect. Therefore the model with B effect is the best model.
+   
+   (e) Since B effect is the best model $\sigma^2_{\epsilon}$=MSE_B=4.777300613
+   
+6. (a) The statement is True, the absolute difference in the SSE values used to calculated proportion or         reduction in error when using the different model. Therefore it needs to assess which of the models        fits better.
+
+   (b) The statement is True, if factor A effects are present then it means there are at least one               pair-wise comparison of facotr A means.
+   
+   (c) The statement is True, the correlation coefficient values range between -1 and 1. Therefore the           maximum value of a conditional or partial $R^2$ is 1.  
+   
+   (d) The statement is False, the estimated value of $\sigma^2_{\epsilon}$ follows MSE of the model.            Therefore the value depends on the model chosen.
+       
+
+
+R HOMEWORK
+
+I
+
+```{r, echo=FALSE, warning=FALSE}
+rat = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/rat.csv",header = TRUE)
+
+find.means = function(the.data,fun.name = mean){
+  a = length(unique(the.data[,2]))
+  b = length(unique(the.data[,3]))
+  means.A = by(the.data[,1], the.data[,2], fun.name)
+  means.B = by(the.data[,1],the.data[,3],fun.name)
+  means.AB = by(the.data[,1],list(the.data[,2],the.data[,3]),fun.name)
+  MAB = matrix(means.AB,nrow = b, ncol = a, byrow = TRUE)
+  colnames(MAB) = names(means.A)
+  rownames(MAB) = names(means.B)
+  MA = as.numeric(means.A)
+  names(MA) = names(means.A)
+  MB = as.numeric(means.B)
+  names(MB) = names(means.B)
+  results = list(A = MA, B = MB, AB = MAB)
+  return(results)
+}
+
+m.treatment=find.means(rat,mean)$AB
+
+AB =lm( Weight ~ Amount * Type,data = rat)
+A.B = lm( Weight~  Amount + Type, data = rat)
+A = lm(Weight ~ Amount, data = rat)
+B = lm(Weight ~ Type, data = rat)
+N0 = lm(Weight ~ 1, data = rat)
+AllM = list(AB, A.B, A, B, N0)
+SSEs = round(sapply(AllM, function(i) sum(i$residual^2)),2)
+
+Partial.R2 = function(small.model,big.model){
+  SSE1 = sum(small.model$residuals^2)
+  SSE2 = sum(big.model$residuals^2)
+  PR2 = (SSE1 - SSE2)/SSE1
+  return(PR2)
+}
+
+SSEF = SSEs[1]
+SSER = SSEs[2]
+
+a = 2
+b = 3
+nt = nrow(rat)
+df.F= nt - a*b
+df.R = nt -(a-1)-(b-1)-1
+FN = round((SSER - SSEF)/(df.R - df.F),4)
+FD = round(SSEF/df.F,4)
+Fs = round(FN/FD,4)
+
+results = anova(A.B,AB)
+t.test = results[2,5]
+p.val = results[2,6]
+```
+
+   (a) $n_T$=`r nt`, a=`r a`, b=`r b`
+
+   (b) $SSE_{AB}$=`r SSEF` ,$SSE_{(A+B)}$=`r SSER`
+
+   (c) $\bar{Y}_{ij.}$=$\frac{1}{n_{ij}}\sum_kY_{ijk}$=`r m.treatment`
+       In other word sample mean for treatment level i of A, j of B estimates $\mu_{ij}$
+   
+   (d) The p-value is `r p.val`, with test-statistic `r t.test`
+   
+   (e) With $\alpha=0.05$, p-value > $\alpha$. Therefore accept null hypothesis and conclude that the            model without interaction effects is a statistically better fit than the model with interaction           effects between amount and type of food.
+
+II
+
+```{r, echo=FALSE, warning=FALSE}
+R2.b=Partial.R2(B,A.B)
+R2.a=Partial.R2(A,A.B)
+
+get.gamma.delta = function(the.model,the.data){
+nt = nrow(the.data)
+a = length(unique(the.data[,2]))
+b = length(unique(the.data[,3]))
+the.data$hat = the.model$fitted.values
+the.ns = find.means(the.data,length)
+a.vals = sort(unique(the.data[,2]))
+b.vals= sort(unique(the.data[,3]))
+muij = matrix(nrow = a, ncol = b)
+rownames(muij) = a.vals
+colnames(muij) = b.vals
+for(i in 1:a){
+for(j in 1:b){
+muij[i,j] = the.data$hat[which(the.data[,2] == a.vals[i] & the.data[,3] == b.vals[j])[1]]
+}
+}
+mi. = rowMeans(muij)
+m.j = colMeans(muij)
+mu.. = sum(muij)/(a*b)
+gammai = mi. - mu..
+deltaj = m.j - mu..
+gmat = matrix(rep(gammai,b),nrow = a, ncol = b, byrow= FALSE)
+dmat = matrix(rep(deltaj,a),nrow = a, ncol = b,byrow=TRUE)
+gamma.deltaij =round(muij -(mu.. + gmat + dmat),8)
+results = list(Mu.. = mu.., Gam = gammai, Del = deltaj, GamDel = gamma.deltaij)
+return(results)
+}
+df.mean=get.gamma.delta(AB,rat)
+b1=df.mean$Gam[1]-df.mean$Gam[2]
+b2=df.mean$Del[1]-df.mean$Del[3]
+
+resultsb = anova(A,A.B)
+t.testb = resultsb[2,5]
+p.valb = resultsb[2,6]
+
+resultsa = anova(B,A.B)
+t.testa = resultsa[2,5]
+p.vala = resultsa[2,6]
+```
+
+   (a) $R^2${A+B|B}=`r R2.b` $R^2${A+B|A}=`r R2.a`
+
+   (b) The difference between the High and Low group is 14.53333
+       $\gamma_i=\mu_{i.}-\mu_{..}$ therefore the the difference between high(i=1) and low(i=2) is same as        $\hat\gamma_1-\hat\gamma_2$.
+       The difference between the Beef and Pork group is 0.5
+       $\delta_j=\mu_{.j}-\mu_{..}$ therefore the the difference between beef(j=1) and pork(j=3) is same         as $\hat\delta_1-\hat\delta_3$.
+
+   (c) The p-value is `r p.valb`, with test-statistic `r t.testb`. When $\alpha=0.01$ p-value is bigger          than $\alpha$. Therefore accept null hypothesis and conclude there are no factor Amount effects           exist.
+   
+   (d) The p-value is `r p.vala`, with test-statistic `r t.testa`. When $\alpha=0.01$ p-value is smaller         than $\alpha$. Therefore reject null hypothesis and conclude there are factor Type effects exist.
+   
+   (e) There are no interaction between factors. Also factor Amount has no effect on the model. Therefore        the final model is adding factor Type effects to a model.
+       $Y_{ijk}=\mu_{..}+\delta_j+\epsilon_{ijk}$ when $\sum_j\delta_j=0$
+  
+
+III
+
+```{r, echo=FALSE, warning=FALSE}
+prog = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/Prog.csv",header = TRUE)
+n.a = 2
+n.b = 3
+n.nt = nrow(prog)
+
+n.AB =lm( days ~ type * years, data = prog)
+n.A.B = lm( days~  type + years, data = prog)
+n.A = lm(days ~ type, data = prog)
+n.B = lm(days ~ years, data = prog)
+n.N0 = lm(days ~ 1, data = prog)
+n.AllM = list(n.AB, n.A.B, n.A, n.B, n.N0)
+n.SSEs = round(sapply(n.AllM, function(i) sum(i$residual^2)),2)
+ssab=n.SSEs[1]
+ssa.b=n.SSEs[2]
+ssa=n.SSEs[3]
+ssb=n.SSEs[4]
+ssn=n.SSEs[5]
+
+R2=Partial.R2(n.A.B,n.AB)
+ndf.mean=get.gamma.delta(n.AB,prog)
+```
+
+   (a) $n_T$=`r n.nt`, a=`r n.a`, b=`r n.b`
+
+   (b) $SSE_{AB}$=`r ssab`, $SSE_{(A+B)}$=`r ssa.b`, $SSE_A$=`r ssa`, $SSE_B$=`r ssb`, $SSE_{null}$=`r ssn`
+
+   (c) $R^2${AB|(A+B)}=`r R2`. The value tell there are approximately 92% chance of reducing the error           when adding an interaction effect to a model with factor A,B effect. Therefore large                      $R^2${AB|(A+B)} suggest that the interaction effect is important to the model.
+   
+   (d) Group of new, under five years, programmer experiencing both, small and large systems had the             lowest average time to complete the project.
+   
+   
+IV
+
+```{r, echo=FALSE, warning=FALSE}
+n.results = anova(n.A.B,n.AB)
+n.t.test = n.results[2,5]
+n.p.val = n.results[2,6]
+aR2=Partial.R2(n.N0,n.A)
+bR2=Partial.R2(n.N0,n.B)
+
+require(graphics)
+ 
+interaction.plot(x.factor = prog$type, trace.factor = prog$years, response = prog$days,type = "l", ylab = "days", xlab = "type", col = c("red4", "orange4", "yellow4", "green4"), lty = 1, lwd = 2, trace.label = "years", xpd = FALSE) 
+```
+
+   (a) The p-value is `r n.p.val`, with test-statistic `r n.t.test`. When $\alpha=0.01$ p-value is smaller        than $\alpha$. Therefore reject null hypothesis and conclude there are interaction effect between         factors.
+   
+   (b) $R^2${A|.}=`r aR2` $R^2${B|.}=`r bR2`
+   
+   (c) Since adding A reduces the overall error of the empty model more than adding B, it appears that the        type of experience the programmer had is more important than the the years of experience.
+   
+   (d) Interaction plot shows that the programmer who worked over 10 years and experienced both small and        large systems will complete as soon as possible. 
+
+## Appendix
+
+```{r,eval=FALSE}
+rat = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/rat.csv",header = TRUE)
+
+find.means = function(the.data,fun.name = mean){
+  a = length(unique(the.data[,2]))
+  b = length(unique(the.data[,3]))
+  means.A = by(the.data[,1], the.data[,2], fun.name)
+  means.B = by(the.data[,1],the.data[,3],fun.name)
+  means.AB = by(the.data[,1],list(the.data[,2],the.data[,3]),fun.name)
+  MAB = matrix(means.AB,nrow = b, ncol = a, byrow = TRUE)
+  colnames(MAB) = names(means.A)
+  rownames(MAB) = names(means.B)
+  MA = as.numeric(means.A)
+  names(MA) = names(means.A)
+  MB = as.numeric(means.B)
+  names(MB) = names(means.B)
+  results = list(A = MA, B = MB, AB = MAB)
+  return(results)
+}
+
+m.treatment=find.means(rat,mean)$AB
+
+AB =lm( Weight ~ Amount * Type,data = rat)
+A.B = lm( Weight~  Amount + Type, data = rat)
+A = lm(Weight ~ Amount, data = rat)
+B = lm(Weight ~ Type, data = rat)
+N0 = lm(Weight ~ 1, data = rat)
+AllM = list(AB, A.B, A, B, N0)
+SSEs = round(sapply(AllM, function(i) sum(i$residual^2)),2)
+
+Partial.R2 = function(small.model,big.model){
+  SSE1 = sum(small.model$residuals^2)
+  SSE2 = sum(big.model$residuals^2)
+  PR2 = (SSE1 - SSE2)/SSE1
+  return(PR2)
+}
+
+SSEF = SSEs[1]
+SSER = SSEs[2]
+
+a = 2
+b = 3
+nt = nrow(rat)
+df.F= nt - a*b
+df.R = nt -(a-1)-(b-1)-1
+FN = round((SSER - SSEF)/(df.R - df.F),4)
+FD = round(SSEF/df.F,4)
+Fs = round(FN/FD,4)
+
+results = anova(A.B,AB)
+t.test = results[2,5]
+p.val = results[2,6]
+
+R2.b=Partial.R2(B,A.B)
+R2.a=Partial.R2(A,A.B)
+
+get.gamma.delta = function(the.model,the.data){
+nt = nrow(the.data)
+a = length(unique(the.data[,2]))
+b = length(unique(the.data[,3]))
+the.data$hat = the.model$fitted.values
+the.ns = find.means(the.data,length)
+a.vals = sort(unique(the.data[,2]))
+b.vals= sort(unique(the.data[,3]))
+muij = matrix(nrow = a, ncol = b)
+rownames(muij) = a.vals
+colnames(muij) = b.vals
+for(i in 1:a){
+for(j in 1:b){
+muij[i,j] = the.data$hat[which(the.data[,2] == a.vals[i] & the.data[,3] == b.vals[j])[1]]
+}
+}
+mi. = rowMeans(muij)
+m.j = colMeans(muij)
+mu.. = sum(muij)/(a*b)
+gammai = mi. - mu..
+deltaj = m.j - mu..
+gmat = matrix(rep(gammai,b),nrow = a, ncol = b, byrow= FALSE)
+dmat = matrix(rep(deltaj,a),nrow = a, ncol = b,byrow=TRUE)
+gamma.deltaij =round(muij -(mu.. + gmat + dmat),8)
+results = list(Mu.. = mu.., Gam = gammai, Del = deltaj, GamDel = gamma.deltaij)
+return(results)
+}
+df.mean=get.gamma.delta(AB,rat)
+b1=df.mean$Gam[1]-df.mean$Gam[2]
+b2=df.mean$Del[1]-df.mean$Del[3]
+
+resultsb = anova(A,A.B)
+t.testb = resultsb[2,5]
+p.valb = resultsb[2,6]
+
+resultsa = anova(B,A.B)
+t.testa = resultsa[2,5]
+p.vala = resultsa[2,6]
+
+prog = read.csv("/Users/Bosco/Desktop/WINTER2021/STA 106/data/Prog.csv",header = TRUE)
+n.a = 2
+n.b = 3
+n.nt = nrow(prog)
+
+n.AB =lm( days ~ type * years, data = prog)
+n.A.B = lm( days~  type + years, data = prog)
+n.A = lm(days ~ type, data = prog)
+n.B = lm(days ~ years, data = prog)
+n.N0 = lm(days ~ 1, data = prog)
+n.AllM = list(n.AB, n.A.B, n.A, n.B, n.N0)
+n.SSEs = round(sapply(n.AllM, function(i) sum(i$residual^2)),2)
+ssab=n.SSEs[1]
+ssa.b=n.SSEs[2]
+ssa=n.SSEs[3]
+ssb=n.SSEs[4]
+ssn=n.SSEs[5]
+
+R2=Partial.R2(n.A.B,n.AB)
+ndf.mean=get.gamma.delta(n.AB,prog)
+
+n.results = anova(n.A.B,n.AB)
+n.t.test = n.results[2,5]
+n.p.val = n.results[2,6]
+aR2=Partial.R2(n.N0,n.A)
+bR2=Partial.R2(n.N0,n.B)
+```

@@ -1,0 +1,83 @@
+---
+title: "CHOE.JONGWOOK-HW5"
+author: "JONG-WOOK-CHOE"
+date: "6/3/2021"
+output: html_document
+---
+
+
+```{r}
+load(file="/Users/Bosco/Desktop/SPRING2021/STA 141A/data/environmental.RData")
+```
+
+1. 
+
+Correlation matrix of all four variables are following
+
+```{r}
+cor(environmental[,1],environmental[,2])
+cor(environmental[,1],environmental[,3])
+cor(environmental[,1],environmental[,4])
+cor(environmental[,2],environmental[,3])
+cor(environmental[,2],environmental[,4])
+cor(environmental[,3],environmental[,4])
+cor(environmental)
+```
+
+From the result, correlation coefficients between ozone and temperature variable has the highest absolute value of 0.6985414. Second highest is between ozone and wind with the absolute value 0.6129508.
+
+2. 
+
+The loadings of the principal componebts as well as the standard deviations of the scores are following,
+
+```{r}
+pr.out<-prcomp(environmental,center=TRUE,scale.=TRUE)
+summary(pr.out)
+```
+
+The variables have shifted to be zero centered and scaled to have unit variance before the calculation takes place.
+
+3.
+
+```{r}
+pr.out$rotation
+apply(pr.out$rotation^2,2,sum)
+```
+
+Extract the load and used the apply function to get the column sum of squares which is following,
+
+$\sum(PC1)^2=1$
+$\sum(PC2)^2=1$
+$\sum(PC3)^2=1$
+$\sum(PC4)^2=1$
+
+The result shows that sum of squares of the loadings of each principal component is equal to 1.
+
+4. 
+
+The two most significant loadings in the absolute value of the first principle component are the variables ozone and temperature. It is 0.5890271 and 0.5527125 of each. This corresponds to the correlation analysis of the first question because with that we had found that the variables ozone and temperature had the highest correlation. coefficient.
+
+5. 
+
+The largest loading in absolute value of the second principle component is the variable radiation with the value of 0.8985548.
+
+6. 
+
+```{r, echo=FALSE}
+summary(pr.out)
+```
+
+From the loading of the principal components shows that the first principal component explains 59% of the total variance. While fourth principal component explains 6.7% of the variance.
+
+
+7. 
+
+It is not enough to use the first two principal components to explain 90% of the total variance. The cumulative proportion of the two principal components is about 81.4%. Therefore to present at least 90% of the total variance, three pcs are need.
+
+8.
+
+```{r}
+biplot(pr.out,scale=0)
+```
+
+Given biplot explains that the first principal component captures the variables ozone and temperature. On the other hand the second principal component captures the variable radiation and wind. Also overlapping lines of ozone and temperature in the biplot explains that the correlation between two variable is high. On the contrary, variables radiation and wind seem to be independent from the variables ozone and temperature.

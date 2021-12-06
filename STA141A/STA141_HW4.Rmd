@@ -1,0 +1,105 @@
+---
+title: "CHOE.JONGWOOK-HW4"
+author: "JONG-WOOK-CHOE"
+date: "5/26/2021"
+output: html_document
+---
+
+1.
+
+```{r}
+library(tidyverse)
+data=iris %>% mutate(Species=as.character(Species))
+data=data %>% filter(Species %in% c("versicolor","virginica"))
+data$Species=as.factor(data$Species)
+library(caret)
+set.seed(1)
+index=c(1:10,51:60)
+train=data[-index,]
+test=data[index,]
+```
+
+2.
+
+(a)
+
+```{r}
+library(MASS)
+lda.fit=lda(Species~Sepal.Length+Sepal.Width,data=train)
+# class-specific means of the predictor variable
+lda.fit$means
+```
+
+Class specific means of the predictor variable "Sepal.Length" are 5.8950 and 6.5925 for the flower types versicolor and virginica. 
+Class specific means of the predictor variable "Sepal.Width" are 2.7450 and 2.9825 for the flower types veriscolor and virginica.
+
+(b)
+
+```{r}
+lda.pred=predict(lda.fit,test)
+lda.cm=table(Species=test$Species,Prediction=lda.pred$class)
+# misclassification error rate
+1-sum(diag(lda.cm))/sum(lda.cm)
+```
+
+Misclassification error rate is 0.4
+
+3.
+
+(a)
+
+```{r}
+logreg=glm(Species~Sepal.Length+Sepal.Width,data=train, family = binomial)
+# i. estimates and standard errors for the model
+summary(logreg)
+# ii. misclassification error rate
+predicted=ifelse(predict(logreg, type = "response")<.5,"versicolor","virginica")
+confusion=table(predicted,factor(train$Species),dnn = c("Predicted species","True species"))
+1-sum(diag(confusion))/sum(confusion)
+```
+
+Misclassification error rate is 0.225
+
+iii. Our accuracy on the test set is worse than our accuracy on the training set. This is usually to be expected. If the training set accuracy differs from the test set accuracy by a lot, usually it is an indication of model overfitting to the training set.
+
+(b)
+
+```{r}
+log.reg=glm(Species~Sepal.Length,data=train, family = binomial)
+# i. estimates and standard errors for the model
+summary(log.reg)
+# ii. misclassification error rate
+predicted=ifelse(predict(log.reg, type = "response")>.5,"versicolor","virginica")
+prob=predict(log.reg, type = "response")
+confusion=table(predicted,as.character(train$Species),
+                 dnn = c("Predicted species","True species"))
+1-sum(diag(confusion))/sum(confusion)
+```
+
+Misclassification error rate is 0.7625
+
+iii. Fitting a logistic regression model to the training data, using the variable "Sepal.Length" as a one-dimensional predictor increased misclassification error rate. This indicates using both of the predictor variables are necessary for the purpose of classification supporting the answer to 3(a)(iii). 
+
+4.
+
+```{r}
+# when k=5
+k=5
+knn=apply(as.matrix(dist(test[,1])),1,order)[2:(k+1),]
+pr=function(i)
+	{
+		mean(test$Species[i]=="versicolor")
+	}
+Pr.first=apply(knn,2,pr)
+test.n=cbind(test,Pr=Pr.first,Pred=ifelse(Pr.first>.5,"versicolor","virginica"))
+table(test.n$Species,test.n$Pred)
+1-sum(diag(table(test.n$Species,test.n$Pred)))/dim(test)[1]
+
+# when k=1
+library(class)
+knn_n=knn(as.matrix(train[,1]),as.matrix(test[,1]),as.factor(train[,5]),k=1)
+table(test$Species,knn_n)
+1-sum(diag(table(test$Species,knn_n)))/dim(test)[1]
+```
+
+5. Unlike the regression model predicting numeric variables there are chance to find qualitative variables. It is when the objective is to find a set of variable that explain the variation in the data then then we focus on logistic regression. The difference between classification method is that logistic regression focus on modeling whether response variable belongs to specific category, Linear discriminant anlaysis is about using $P(X|Y)$ through 'Bayer' theorem to predict $P(Y=k|X=x)$, and lastly knn is used when decision boundary is non linear. 

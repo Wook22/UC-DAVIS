@@ -1,0 +1,444 @@
+---
+title: "CHOE.JONGWOOK-HW3"
+author: "JONG-WOOK-CHOE"
+output: pdf_document
+---
+I.
+
+(a)
+```{r, echo=FALSE}
+library(mvtnorm) 
+mu=c(0, 0)
+rho12=-0.99
+sigma=matrix(data = c(1, rho12, rho12, 1), nrow = 2, ncol = 2, byrow = TRUE)
+P=cov2cor(V = sigma)
+P
+
+N=1000
+set.seed(8128)
+X=rmvnorm(n = N, mean = mu, sigma =sigma)
+head(X)
+```
+(b)
+```{r, echo=FALSE}
+pca.save=princomp(x = X, cor = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.0)
+```
+
+The “Standard deviation” row in the “Importance of components” $\sqrt{\hat\lambda_j}$ table gives the standard deviation of each principal component in the first row. 
+Therefore, $\hat\lambda_1 = 1.4108003^2 = 1.990357$ and $\hat\lambda_2 = 0.098195845^2 = 0.009642424$
+
+The “Loadings” table gives the eigenvectors. The “loadings” name comes from the eigenvectors being the coefficients in the linear combination with the data.
+
+(c)
+
+```{r, echo=FALSE}
+plot(pca.save, type = "lines", main = "Scree plot for bivariate normal data")
+```
+
+First component's cumulative proportion is 0.9951788, which is 99%. That is why the second component shows almost zero. 
+
+
+(d) Since the first component's cumulative proportion already reaches 90%, we only need one PC.
+
+
+(e)
+
+```{r, echo=FALSE}
+pca.save$scale=apply(X = X, MARGIN = 2, FUN = sd)
+score.save=predict(pca.save, newdata = X)
+head(score.save)
+
+par(mfrow = c(1,2)) 
+par(pty = "s")
+common.limits=c(min(score.save, X), max(score.save, X))
+ 
+plot(x = X[,1], y = X[,2], xlab = expression(x[1]), ylab = expression(x[2]), main = "Original data", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+ 
+plot(x = score.save[,1], y = score.save[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+```
+The graph shows that the x and y-axis have to be rotated bi
+
+(f)
+```{r, echo=FALSE}
+rho12=-0.9
+sigma=matrix(data = c(1, rho12, rho12, 1), nrow = 2, ncol = 2, byrow = TRUE)
+N=1000
+set.seed(8128)
+X=rmvnorm(n = N, mean = mu, sigma =sigma)
+pca.save=princomp(x = X, cor = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.0)
+pca.save$scale=apply(X = X, MARGIN = 2, FUN = sd)
+score.save=predict(pca.save, newdata = X)
+par(mfrow = c(1,2)) 
+par(pty = "s")
+common.limits=c(min(score.save, X), max(score.save, X))
+plot(x = X[,1], y = X[,2], xlab = expression(x[1]), ylab = expression(x[2]), main = "Original data", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+plot(x = score.save[,1], y = score.save[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+rho12=-0.5
+sigma=matrix(data = c(1, rho12, rho12, 1), nrow = 2, ncol = 2, byrow = TRUE)
+N=1000
+set.seed(8128)
+X=rmvnorm(n = N, mean = mu, sigma =sigma)
+pca.save=princomp(x = X, cor = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.0)
+pca.save$scale=apply(X = X, MARGIN = 2, FUN = sd)
+score.save=predict(pca.save, newdata = X)
+par(mfrow = c(1,2)) 
+par(pty = "s")
+common.limits=c(min(score.save, X), max(score.save, X))
+plot(x = X[,1], y = X[,2], xlab = expression(x[1]), ylab = expression(x[2]), main = "Original data", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+plot(x = score.save[,1], y = score.save[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+rho12=0
+sigma=matrix(data = c(1, rho12, rho12, 1), nrow = 2, ncol = 2, byrow = TRUE)
+N=1000
+set.seed(8128)
+X=rmvnorm(n = N, mean = mu, sigma =sigma)
+pca.save=princomp(x = X, cor = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.0)
+pca.save$scale=apply(X = X, MARGIN = 2, FUN = sd)
+score.save=predict(pca.save, newdata = X)
+par(mfrow = c(1,2)) 
+par(pty = "s")
+common.limits=c(min(score.save, X), max(score.save, X))
+plot(x = X[,1], y = X[,2], xlab = expression(x[1]), ylab = expression(x[2]), main = "Original data", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+plot(x = score.save[,1], y = score.save[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+rho12=0.5
+sigma=matrix(data = c(1, rho12, rho12, 1), nrow = 2, ncol = 2, byrow = TRUE)
+N=1000
+set.seed(8128)
+X=rmvnorm(n = N, mean = mu, sigma =sigma)
+pca.save=princomp(x = X, cor = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.0)
+pca.save$scale=apply(X = X, MARGIN = 2, FUN = sd)
+score.save=predict(pca.save, newdata = X)
+par(mfrow = c(1,2)) 
+par(pty = "s")
+common.limits=c(min(score.save, X), max(score.save, X))
+plot(x = X[,1], y = X[,2], xlab = expression(x[1]), ylab = expression(x[2]), main = "Original data", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+plot(x = score.save[,1], y = score.save[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+rho12=0.9
+sigma=matrix(data = c(1, rho12, rho12, 1), nrow = 2, ncol = 2, byrow = TRUE)
+N=1000
+set.seed(8128)
+X=rmvnorm(n = N, mean = mu, sigma =sigma)
+pca.save=princomp(x = X, cor = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.0)
+pca.save$scale=apply(X = X, MARGIN = 2, FUN = sd)
+score.save=predict(pca.save, newdata = X)
+par(mfrow = c(1,2)) 
+par(pty = "s")
+common.limits=c(min(score.save, X), max(score.save, X))
+plot(x = X[,1], y = X[,2], xlab = expression(x[1]), ylab = expression(x[2]), main = "Original data", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+plot(x = score.save[,1], y = score.save[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+rho12=0.99
+sigma=matrix(data = c(1, rho12, rho12, 1), nrow = 2, ncol = 2, byrow = TRUE)
+N=1000
+set.seed(8128)
+X=rmvnorm(n = N, mean = mu, sigma =sigma)
+pca.save=princomp(x = X, cor = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.0)
+pca.save$scale=apply(X = X, MARGIN = 2, FUN = sd)
+score.save=predict(pca.save, newdata = X)
+par(mfrow = c(1,2)) 
+par(pty = "s")
+common.limits=c(min(score.save, X), max(score.save, X))
+plot(x = X[,1], y = X[,2], xlab = expression(x[1]), ylab = expression(x[2]), main = "Original data", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+plot(x = score.save[,1], y = score.save[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+```
+
+II.
+
+```{r, echo=FALSE}
+stock=read.table("/Users/Bosco/Desktop/SPRING2021/STA 135/data/Stocks_Data.txt")
+names(stock)=c("JP Morgan", "Citibank", "Well Fargo", "Royal Dutch Shell", "Exxon Mobil")
+head(stock)
+n=nrow(stock)
+S=cov(stock[, c("JP Morgan", "Citibank", "Well Fargo", "Royal Dutch Shell", "Exxon Mobil")])*(n-1)/n
+head(S)
+
+pca=princomp(x = stock, cor = FALSE)
+summary(pca, loadings = TRUE, cutoff = 0.0)
+```
+(b) The first principal component is measuring the different stocks list given higher weight to the Royal Dutch Shell and Exxon mobil and less to JP Morgan, Citibank, and Well Fargo. The secon PC measures higher weight to the JP Morgan and Citibank and less to Well Fargo, Royal Dutch Shell, and Exxon mobil.
+
+(c) Cumulative proportion of the total sample variance explained by the first three principal components is 0.89880948, which is 90%.
+
+(d)
+
+```{r, echo=FALSE}
+plot(pca, type = "lines", main = "Scree plot for stock data")
+```
+
+Until the bending point the proportion of each principal component in the data is high. After the bending point, the portion of the main ingredient is significantly smaller even if it is included. Therefore usually, it is decided that the data should be represented by including the principal components only to the point of bending. In this case PC1 and PC2.
+
+(e)
+```{r, echo=FALSE}
+pca$scale=apply(X = stock, MARGIN = 2, FUN = sd)
+score=predict(pca, newdata = stock)
+limits=c(min(score), max(score))
+plot(x = score[,1], y = score[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = limits, ylim = limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+```
+The graph shows that PC1 accounts more of the total variation around the PCs.
+
+(f) Yes, cumulative proportion of the total sample variance explained by the first two principal components is 0.80059364, which already reaches 80%. Therefore we only need first and second components. Therefore stock rates-of-return data can be summarized in two dimensions.
+
+III.
+
+(a)
+
+```{r, echo=FALSE}
+goblet=read.csv("/Users/Bosco/Desktop/SPRING2021/STA 135/data/goblet.csv")
+goblet2=cbind(w1 = goblet$x1/goblet$x3,w2 = goblet$x2/goblet$x3,w4 = goblet$x4/goblet$x3,w5 = goblet$x5/goblet$x3,w6 = goblet$x6/goblet$x3)
+stars(x = goblet[,-1], draw.segments = TRUE,
+key.loc = c(14,10), main = "Goblet star plot",
+labels = goblet$ID)
+```
+
+(b) The 3 and 20 goblets are large and appear to stand out. However it is hard to generalize which factor measurements for goblets affects. 
+
+(c)
+
+```{r, echo=FALSE}
+library(MASS)
+shelf.color<-rep(x = c("black", "red", "green", "blue"),
+each = 10)
+parcoord(x = goblet2,col = shelf.color, main = "Goblet parallel coordinate plot")
+```
+
+(d) The horizontal axis gives each variable name, and plotted above these names are the corresponding values for each experimental unit. These values are scaled so that the minimum and maximum values for each variable appear at the bottom and top, respectively, of the vertical axis. A line is drawn for each experimental unit indicating its position across the variables.
+
+(e)
+
+```{r, echo=FALSE}
+pca.g2=princomp(x = goblet2, cor = TRUE)
+summary(pca.g2, loadings = TRUE, cutoff = 0.0)
+```
+
+(f) Cumulative proportion of the total sample variance explained by the first three principal components is 0.89880948, which is 90%.
+
+(g) Cumulative proportion of the total sample variance explained by the first two principal components is 0.8657283. It already exceeds 80% proportion of two principal component in the data. Therefore two PCs are enough for the analysis of the goblet data.
+
+(h)
+
+```{r, echo=FALSE}
+plot(pca.g2, type = "lines", main = "Scree plot for goblet data")
+```
+Until the bending point the proportion of each principal component in the data is high. After the bending point, the portion of the main ingredient is significantly smaller even if it is included. Therefore usually, it is decided that the data should be represented by including the principal components only to the point of bending. In this case PC1 and PC2.
+
+(i)
+
+```{r, echo=FALSE}
+pca.g2$scale=apply(X = goblet2, MARGIN = 2, FUN = sd)
+score.g=predict(pca.g2, newdata = goblet2)
+limits=c(min(score.g), max(score.g))
+plot(x = score.g[,1], y = score.g[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = limits, ylim = limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+```
+
+## Appendix
+
+```{r,eval=FALSE}
+library(mvtnorm) 
+mu=c(0, 0)
+rho12=-0.99
+sigma=matrix(data = c(1, rho12, rho12, 1), nrow = 2, ncol = 2, byrow = TRUE)
+P=cov2cor(V = sigma)
+P
+
+N=1000
+set.seed(8128)
+X=rmvnorm(n = N, mean = mu, sigma =sigma)
+head(X)
+pca.save=princomp(x = X, cor = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.0)
+plot(pca.save, type = "lines", main = "Scree plot for bivariate normal data")
+pca.save$scale=apply(X = X, MARGIN = 2, FUN = sd)
+score.save=predict(pca.save, newdata = X)
+head(score.save)
+
+par(mfrow = c(1,2)) 
+par(pty = "s")
+common.limits=c(min(score.save, X), max(score.save, X))
+ 
+plot(x = X[,1], y = X[,2], xlab = expression(x[1]), ylab = expression(x[2]), main = "Original data", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+ 
+plot(x = score.save[,1], y = score.save[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+rho12=-0.9
+sigma=matrix(data = c(1, rho12, rho12, 1), nrow = 2, ncol = 2, byrow = TRUE)
+N=1000
+set.seed(8128)
+X=rmvnorm(n = N, mean = mu, sigma =sigma)
+pca.save=princomp(x = X, cor = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.0)
+pca.save$scale=apply(X = X, MARGIN = 2, FUN = sd)
+score.save=predict(pca.save, newdata = X)
+par(mfrow = c(1,2)) 
+par(pty = "s")
+common.limits=c(min(score.save, X), max(score.save, X))
+plot(x = X[,1], y = X[,2], xlab = expression(x[1]), ylab = expression(x[2]), main = "Original data", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+plot(x = score.save[,1], y = score.save[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+rho12=-0.5
+sigma=matrix(data = c(1, rho12, rho12, 1), nrow = 2, ncol = 2, byrow = TRUE)
+N=1000
+set.seed(8128)
+X=rmvnorm(n = N, mean = mu, sigma =sigma)
+pca.save=princomp(x = X, cor = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.0)
+pca.save$scale=apply(X = X, MARGIN = 2, FUN = sd)
+score.save=predict(pca.save, newdata = X)
+par(mfrow = c(1,2)) 
+par(pty = "s")
+common.limits=c(min(score.save, X), max(score.save, X))
+plot(x = X[,1], y = X[,2], xlab = expression(x[1]), ylab = expression(x[2]), main = "Original data", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+plot(x = score.save[,1], y = score.save[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+rho12=0
+sigma=matrix(data = c(1, rho12, rho12, 1), nrow = 2, ncol = 2, byrow = TRUE)
+N=1000
+set.seed(8128)
+X=rmvnorm(n = N, mean = mu, sigma =sigma)
+pca.save=princomp(x = X, cor = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.0)
+pca.save$scale=apply(X = X, MARGIN = 2, FUN = sd)
+score.save=predict(pca.save, newdata = X)
+par(mfrow = c(1,2)) 
+par(pty = "s")
+common.limits=c(min(score.save, X), max(score.save, X))
+plot(x = X[,1], y = X[,2], xlab = expression(x[1]), ylab = expression(x[2]), main = "Original data", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+plot(x = score.save[,1], y = score.save[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+rho12=0.5
+sigma=matrix(data = c(1, rho12, rho12, 1), nrow = 2, ncol = 2, byrow = TRUE)
+N=1000
+set.seed(8128)
+X=rmvnorm(n = N, mean = mu, sigma =sigma)
+pca.save=princomp(x = X, cor = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.0)
+pca.save$scale=apply(X = X, MARGIN = 2, FUN = sd)
+score.save=predict(pca.save, newdata = X)
+par(mfrow = c(1,2)) 
+par(pty = "s")
+common.limits=c(min(score.save, X), max(score.save, X))
+plot(x = X[,1], y = X[,2], xlab = expression(x[1]), ylab = expression(x[2]), main = "Original data", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+plot(x = score.save[,1], y = score.save[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+rho12=0.9
+sigma=matrix(data = c(1, rho12, rho12, 1), nrow = 2, ncol = 2, byrow = TRUE)
+N=1000
+set.seed(8128)
+X=rmvnorm(n = N, mean = mu, sigma =sigma)
+pca.save=princomp(x = X, cor = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.0)
+pca.save$scale=apply(X = X, MARGIN = 2, FUN = sd)
+score.save=predict(pca.save, newdata = X)
+par(mfrow = c(1,2)) 
+par(pty = "s")
+common.limits=c(min(score.save, X), max(score.save, X))
+plot(x = X[,1], y = X[,2], xlab = expression(x[1]), ylab = expression(x[2]), main = "Original data", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+plot(x = score.save[,1], y = score.save[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+rho12=0.99
+sigma=matrix(data = c(1, rho12, rho12, 1), nrow = 2, ncol = 2, byrow = TRUE)
+N=1000
+set.seed(8128)
+X=rmvnorm(n = N, mean = mu, sigma =sigma)
+pca.save=princomp(x = X, cor = TRUE)
+summary(pca.save, loadings = TRUE, cutoff = 0.0)
+pca.save$scale=apply(X = X, MARGIN = 2, FUN = sd)
+score.save=predict(pca.save, newdata = X)
+par(mfrow = c(1,2)) 
+par(pty = "s")
+common.limits=c(min(score.save, X), max(score.save, X))
+plot(x = X[,1], y = X[,2], xlab = expression(x[1]), ylab = expression(x[2]), main = "Original data", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+plot(x = score.save[,1], y = score.save[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = common.limits, ylim = common.limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+stock=read.table("/Users/Bosco/Desktop/SPRING2021/STA 135/data/Stocks_Data.txt")
+names(stock)=c("JP Morgan", "Citibank", "Well Fargo", "Royal Dutch Shell", "Exxon Mobil")
+head(stock)
+n=nrow(stock)
+S=cov(stock[, c("JP Morgan", "Citibank", "Well Fargo", "Royal Dutch Shell", "Exxon Mobil")])*(n-1)/n
+head(S)
+
+pca=princomp(x = stock, cor = FALSE)
+summary(pca, loadings = TRUE, cutoff = 0.0)
+plot(pca, type = "lines", main = "Scree plot for stock data")
+pca$scale=apply(X = stock, MARGIN = 2, FUN = sd)
+score=predict(pca, newdata = stock)
+limits=c(min(score), max(score))
+plot(x = score[,1], y = score[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = limits, ylim = limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+goblet=read.csv("/Users/Bosco/Desktop/SPRING2021/STA 135/data/goblet.csv")
+goblet2=cbind(w1 = goblet$x1/goblet$x3,w2 = goblet$x2/goblet$x3,w4 = goblet$x4/goblet$x3,w5 = goblet$x5/goblet$x3,w6 = goblet$x6/goblet$x3)
+stars(x = goblet[,-1], draw.segments = TRUE,
+key.loc = c(14,10), main = "Goblet star plot",
+labels = goblet$ID)
+library(MASS)
+shelf.color<-rep(x = c("black", "red", "green", "blue"),
+each = 10)
+parcoord(x = goblet2,col = shelf.color, main = "Goblet parallel coordinate plot")
+pca.g2=princomp(x = goblet2, cor = TRUE)
+summary(pca.g2, loadings = TRUE, cutoff = 0.0)
+plot(pca.g2, type = "lines", main = "Scree plot for goblet data")
+pca.g2$scale=apply(X = goblet2, MARGIN = 2, FUN = sd)
+score.g=predict(pca.g2, newdata = goblet2)
+limits=c(min(score.g), max(score.g))
+plot(x = score.g[,1], y = score.g[,2], xlab = "PC #1", ylab = "PC #2", main = "Principal components", xlim = limits, ylim = limits, panel.first = grid(col = "lightgray", lty = "dotted"))
+abline(h = 0)
+abline(v = 0)
+```
